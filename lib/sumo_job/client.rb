@@ -8,7 +8,7 @@ class SumoJob::Client
   DEFAULT_ERROR_MESSAGE = 'Error sending API request'
 
   # Create a new `SumoJob::Client` with the given credentials.
-  def initialize(creds = SumoJob.config.load_creds!)
+  def initialize(creds = SumoJob.creds)
     @creds = creds.freeze
   end
 

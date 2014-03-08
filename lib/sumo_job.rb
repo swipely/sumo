@@ -15,6 +15,16 @@ module SumoJob
 
   # Define top-level functions.
 
+  def creds
+    @creds ||= config.load_config!
+  end
+  module_function :creds
+
+  def creds=(new_creds)
+    @creds = new_creds
+  end
+  module_function :creds=
+
   # The default config for the gem.
   def config
     @config ||= SumoJob::Config.new
