@@ -2,7 +2,7 @@
 class SumoJob::Client
   include SumoJob::Error
 
-  attr_reader :creds
+  attr_reader :creds, :cookie
 
   # The error message raised when the result can be parsed from Sumo.
   DEFAULT_ERROR_MESSAGE = 'Error sending API request'
@@ -16,6 +16,7 @@ class SumoJob::Client
   def request(hash, &block)
     response = connection.request(add_headers(hash), &block)
     handle_errors!(response)
+    set_cookie!(response)
     response.body
   end
 
@@ -42,6 +43,11 @@ class SumoJob::Client
   end
   private :handle_errors!
 
+  def set_cookie!(response)
+    @cookie = response.headers['Set-Cookie'] || @cookie
+  end
+  private :set_cookie!
+
   def extract_error_message(body)
     JSON.parse(body)['message'] || DEFAULT_ERROR_MESSAGE
   rescue
@@ -49,14 +55,13 @@ class SumoJob::Client
   end
   private :extract_error_message
 
-  # Memoized private functions.
-
   def default_headers
-    @default_headers ||= {
+    {
       'Authorization' => "Basic #{encoded_creds}",
       'Content-Type' => 'application/json',
+      'Cookie' => cookie,
       'Accept' => 'application/json'
-    }
+    }.reject { |_, value| value.nil? }
   end
   private :default_headers
 

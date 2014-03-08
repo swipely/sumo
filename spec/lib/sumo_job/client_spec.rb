@@ -32,6 +32,7 @@ describe SumoJob::Client do
     it 'sets the correct headers' do
       subject.stub(:handle_errors!)
       response.stub(:body)
+      response.stub(:headers).and_return({})
       connection.should_receive(:request)
                 .with(
                   :method => :get,
@@ -46,11 +47,30 @@ describe SumoJob::Client do
 
     context 'when a 2xx-level status code is returned by the API' do
       let(:body) { 'TEST RESULT' }
-      let(:response) { double(:response, :status => 200, :body => body) }
+      let(:cookie) { 'oreo' }
+      let(:headers) { {'Set-Cookie' => cookie } }
+      let(:response) {
+        double(:response, :status => 200, :body => body, :headers => headers)
+      }
       before { connection.stub(:request).and_return(response) }
 
       it 'returns the response body' do
         subject.request(:method => :get, :path => '/').should == body
+      end
+
+      it 'sets the cookie' do
+        subject.request(:method => :get, :path => '/')
+        connection.should_receive(:request)
+                  .with(
+                    :method => :get,
+                    :path => '/',
+                    :headers => {
+                      'Content-Type' => 'application/json',
+                      'Accept' => 'application/json',
+                      'Cookie' => cookie,
+                      'Authorization' => "Basic #{encoded}" })
+                  .and_return(response)
+        subject.request(:method => :get, :path => '/')
       end
     end
 
