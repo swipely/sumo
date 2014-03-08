@@ -14,7 +14,7 @@ class SumoJob::Client
 
   # Send a HTTP request to the server, handling any errors that may occur.
   def request(hash, &block)
-    response = connection.request(add_headers(hash), &block)
+    response = connection.request(add_defaults(hash), &block)
     handle_errors!(response)
     set_cookie!(response)
     response.body
@@ -30,10 +30,13 @@ class SumoJob::Client
 
   # Private functions that operate on the request and response.
 
-  def add_headers(hash)
-    hash.merge(:headers => default_headers.merge(hash[:headers] || {}))
+  def add_defaults(hash)
+    hash.merge(
+      :headers => default_headers.merge(hash[:headers] || {}),
+      :path => "/api/v#{SumoJob::API_VERSION}#{hash[:path]}"
+    )
   end
-  private :add_headers
+  private :add_defaults
 
   def handle_errors!(response)
     case response.status
@@ -72,7 +75,7 @@ class SumoJob::Client
 
   def connection
     @connection ||= Excon.new(
-      "https://api.sumologic.com/api/v#{SumoJob::SUMO_API_VERSION}"
+      'https://api.sumologic.com'
     )
   end
   private :connection

@@ -6,7 +6,7 @@ describe SumoJob::Client do
 
     context 'with no arguments' do
       subject { SumoJob::Client.new }
-      before { SumoJob.stub_chain(:config, :load_creds!).and_return(creds) }
+      before { SumoJob.stub(:creds).and_return(creds) }
       it 'sets the default credentials' do
         subject.creds.should == creds
       end
@@ -36,7 +36,7 @@ describe SumoJob::Client do
       connection.should_receive(:request)
                 .with(
                   :method => :get,
-                  :path => '/',
+                  :path => '/api/v1/',
                   :headers => {
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
@@ -63,7 +63,7 @@ describe SumoJob::Client do
         connection.should_receive(:request)
                   .with(
                     :method => :get,
-                    :path => '/',
+                    :path => '/api/v1/',
                     :headers => {
                       'Content-Type' => 'application/json',
                       'Accept' => 'application/json',

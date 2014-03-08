@@ -7,5 +7,5 @@ module SumoJob
 
   VERSION = [MAJOR, MINOR, PATCH, RELEASE].compact.join('.')
 
-  SUMO_API_VERSION = 1
+  API_VERSION = 1
 end
