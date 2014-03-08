@@ -6,4 +6,6 @@ module SumoJob
   RELEASE = nil
 
   VERSION = [MAJOR, MINOR, PATCH, RELEASE].compact.join('.')
+
+  SUMO_API_VERSION = 1
 end
