@@ -16,7 +16,7 @@ module SumoJob
   # Define top-level functions.
 
   def creds
-    @creds ||= config.load_config!
+    @creds ||= config.load_creds!
   end
   module_function :creds
 

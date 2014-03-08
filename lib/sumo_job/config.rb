@@ -33,7 +33,7 @@ class SumoJob::Config
   end
 
   # Load the credentials.
-  def load_config
+  def load_creds
     @config ||= if file_specified?
       file_creds || env_creds
     else
@@ -42,8 +42,8 @@ class SumoJob::Config
   end
 
   # Load the credentials, raising an error if none are specified.
-  def load_config!
-    if (creds = load_config).nil?
+  def load_creds!
+    if (creds = load_creds).nil?
       raise NoCredsFound, "No credentials were found, set ENV['SUMO_CREDS']."
     else
       creds

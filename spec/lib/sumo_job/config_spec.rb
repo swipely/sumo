@@ -66,7 +66,7 @@ describe SumoJob::Config do
     end
   end
 
-  describe '#load_config' do
+  describe '#load_creds' do
     let(:email) { 'test@test.net' }
     let(:password) { 'trustsum1' }
     let(:creds) { [email, password].join(':') }
@@ -76,7 +76,7 @@ describe SumoJob::Config do
 
     context 'when a config file is not specified' do
       it 'prefers the environment variable' do
-        subject.load_config.should == ENV['SUMO_CREDS']
+        subject.load_creds.should == ENV['SUMO_CREDS']
       end
     end
 
@@ -84,27 +84,27 @@ describe SumoJob::Config do
       subject { SumoJob::Config.new(test_config_file) }
 
       it 'prefers the config file' do
-        subject.load_config.should == File.read(test_config_file).strip
+        subject.load_creds.should == File.read(test_config_file).strip
       end
     end
   end
 
-  describe '#load_config!' do
+  describe '#load_creds!' do
     context 'when the configuration cannot be found' do
-      before { subject.stub(:load_config).and_return(nil) }
+      before { subject.stub(:load_creds).and_return(nil) }
 
       it 'raises an error' do
-        expect { subject.load_config! }
+        expect { subject.load_creds! }
           .to raise_error(SumoJob::Error::NoCredsFound)
       end
     end
 
     context 'when the configuration can be found' do
       let(:creds) { 'sumo@sumo.net:my-pass' }
-      before { subject.stub(:load_config).and_return(creds) }
+      before { subject.stub(:load_creds).and_return(creds) }
 
       it 'returns the configuration' do
-        subject.load_config!.should == creds
+        subject.load_creds!.should == creds
       end
     end
   end
