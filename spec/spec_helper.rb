@@ -1,7 +1,8 @@
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'rspec'
-require 'sumo_job'
+require 'pry'
+require 'sumo'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |file| require file }
 

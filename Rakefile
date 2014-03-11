@@ -1,7 +1,7 @@
 $LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
 
 require 'rake'
-require 'sumo_job'
+require 'sumo'
 require 'rspec/core/rake_task'
 require 'cane/rake_task'
 

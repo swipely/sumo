@@ -6,20 +6,20 @@
 #
 # The environment varibale is called 'SUMO_CREDS'; the default configuration
 # file is '~/.sumo_creds'.
-class SumoJob::Config
-  include SumoJob::Error
+class Sumo::Config
+  include Sumo::Error
 
   attr_reader :config_file
 
   # Given an optional `String`, sets and freezes the `@config_file` instance
   # variable, as long as it's a valid file path.
-  def initialize(config_file = SumoJob::DEFAULT_CONFIG_FILE)
+  def initialize(config_file = Sumo::DEFAULT_CONFIG_FILE)
     @config_file = File.expand_path(config_file).freeze
   end
 
   # Test if an alternate file has been specified.
   def file_specified?
-    config_file != SumoJob::DEFAULT_CONFIG_FILE
+    config_file != Sumo::DEFAULT_CONFIG_FILE
   end
 
   # Get the credentials from the environment.

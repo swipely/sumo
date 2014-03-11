@@ -1,17 +1,22 @@
 require 'base64'
+require 'clamp'
 require 'excon'
 require 'json'
 
 # This is the top level module for the gem. It is used as a namespace and holds
 # top-level convenience functions.
-module SumoJob
+module Sumo
   # Define global constants.
   DEFAULT_CONFIG_FILE = File.expand_path('~/.sumo_creds').freeze
 
   # Require sub-modules.
-  require 'sumo_job/error'
-  require 'sumo_job/config'
-  require 'sumo_job/client'
+  require 'sumo/error'
+  require 'sumo/config'
+  require 'sumo/client'
+  require 'sumo/search'
+  require 'sumo/collection'
+  require 'sumo/cli'
+  require 'sumo/version'
 
   # Define top-level functions.
 
@@ -27,7 +32,7 @@ module SumoJob
 
   # The default config for the gem.
   def config
-    @config ||= SumoJob::Config.new
+    @config ||= Sumo::Config.new
   end
   module_function :config
 
@@ -39,7 +44,7 @@ module SumoJob
 
   # The default client for the gem.
   def client
-    @client ||= SumoJob::Client.new
+    @client ||= Sumo::Client.new
   end
   module_function :client
 
@@ -48,4 +53,10 @@ module SumoJob
     @client = new_client
   end
   module_function :client=
+
+  # Create a new search.
+  def search(*args)
+    Sumo::Search.new(*args)
+  end
+  module_function :search
 end

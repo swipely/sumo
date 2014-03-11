@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe SumoJob::Config do
+describe Sumo::Config do
   let(:test_config_file) {
     File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'sumo-creds')
   }
 
   describe '#initialize' do
     let(:config_file) { '/etc/sumo-creds' }
-    subject { SumoJob::Config.new(config_file) }
+    subject { Sumo::Config.new(config_file) }
 
     it 'sets the @config_file instance variable' do
       subject.config_file.should == config_file
@@ -15,17 +15,17 @@ describe SumoJob::Config do
   end
 
   describe '#file_specified?' do
-    context 'when SumoJob::DEFAULT_CONFIG_FILE is not equal to @config_file' do
+    context 'when Sumo::DEFAULT_CONFIG_FILE is not equal to @config_file' do
       let(:config_file) { '/etc/sumo-creds' }
-      subject { SumoJob::Config.new(config_file) }
+      subject { Sumo::Config.new(config_file) }
 
       it 'returns true' do
         subject.file_specified?.should be_true
       end
     end
 
-    context 'when SumoJob::DEFAULT_CONFIG_FILE is equal to @config_file' do
-      subject { SumoJob::Config.new }
+    context 'when Sumo::DEFAULT_CONFIG_FILE is equal to @config_file' do
+      subject { Sumo::Config.new }
 
       it 'returns false' do
         subject.file_specified?.should be_false
@@ -47,7 +47,7 @@ describe SumoJob::Config do
   end
 
   describe '#file_creds' do
-    subject { SumoJob::Config.new(config_file) }
+    subject { Sumo::Config.new(config_file) }
 
     context 'when @config_file is not a file' do
       let(:config_file) { '/not/a/file' }
@@ -81,7 +81,7 @@ describe SumoJob::Config do
     end
 
     context 'when a config file is specified' do
-      subject { SumoJob::Config.new(test_config_file) }
+      subject { Sumo::Config.new(test_config_file) }
 
       it 'prefers the config file' do
         subject.load_creds.should == File.read(test_config_file).strip
@@ -95,7 +95,7 @@ describe SumoJob::Config do
 
       it 'raises an error' do
         expect { subject.load_creds! }
-          .to raise_error(SumoJob::Error::NoCredsFound)
+          .to raise_error(Sumo::Error::NoCredsFound)
       end
     end
 

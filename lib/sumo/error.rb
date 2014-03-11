@@ -1,5 +1,5 @@
 # This module holds all errors for the gem.
-module SumoJob::Error
+module Sumo::Error
   # This class is never thrown but can be used to catch all errors thrown in the
   # gem.
   class BaseError < StandardError; end

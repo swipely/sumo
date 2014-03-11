@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.sumologic.com/api/v1/search/jobs
+    body:
+      encoding: UTF-8
+      string: "{\"query\":\"| count _sourceCategory\",\"from\":\"2014-01-01T00:00:00\",\"to\":\"2014-03-01T00:00:00\",\"timeZone\":\"EST\"}"
+    headers:
+      User-Agent:
+      - excon/0.32.1
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+  response:
+    status:
+      code: 202
+      message: 
+    headers:
+      Cache-control:
+      - no-cache="set-cookie"
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 26 Mar 2014 13:49:39 GMT
+      Expires:
+      - Thu, 01-Jan-1970 00:00:00 GMT
+      Location:
+      - http://api.sumologic.com/api/v1/search/jobs/3B104AE0F7DE35D4
+      Strict-Transport-Security:
+      - max-age=15552000
+      Content-Length:
+      - '117'
+      Connection:
+      - Close
+    body:
+      encoding: UTF-8
+      string: "{\"id\":\"3B104AE0F7DE35D4\",\"link\":{\"rel\":\"filtered\",\"href\":\"filtered\"}}"
+    http_version: 
+  recorded_at: Wed, 26 Mar 2014 13:49:42 GMT
+recorded_with: VCR 2.8.0

@@ -1,14 +1,14 @@
 # This class has the lowest-level interface to interact with the Sumo Job API.
-class SumoJob::Client
-  include SumoJob::Error
+class Sumo::Client
+  include Sumo::Error
 
   attr_reader :creds, :cookie
 
   # The error message raised when the result can be parsed from Sumo.
   DEFAULT_ERROR_MESSAGE = 'Error sending API request'
 
-  # Create a new `SumoJob::Client` with the given credentials.
-  def initialize(creds = SumoJob.creds)
+  # Create a new `Sumo::Client` with the given credentials.
+  def initialize(creds = Sumo.creds)
     @creds = creds.freeze
   end
 
@@ -33,7 +33,7 @@ class SumoJob::Client
   def add_defaults(hash)
     hash.merge(
       :headers => default_headers.merge(hash[:headers] || {}),
-      :path => "/api/v#{SumoJob::API_VERSION}#{hash[:path]}"
+      :path => "/api/v#{Sumo::API_VERSION}#{hash[:path]}"
     )
   end
   private :add_defaults

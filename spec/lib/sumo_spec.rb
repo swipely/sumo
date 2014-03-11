@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe SumoJob do
+describe Sumo do
   it { should be_a Module }
 end

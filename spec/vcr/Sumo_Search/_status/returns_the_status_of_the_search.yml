@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.sumologic.com/api/v1/search/jobs
+    body:
+      encoding: UTF-8
+      string: "{\"query\":\"| count _sourceCategory\",\"from\":\"2013-01-01T00:00:00\",\"to\":\"2014-03-01T00:00:00\",\"timeZone\":\"EST\"}"
+    headers:
+      User-Agent:
+      - excon/0.32.1
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+  response:
+    status:
+      code: 202
+      message: 
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 26 Mar 2014 13:49:41 GMT
+      Location:
+      - http://api.sumologic.com/api/v1/search/jobs/24997BFEE7AC89B5
+      Strict-Transport-Security:
+      - max-age=15552000
+      Content-Length:
+      - '117'
+      Connection:
+      - Close
+    body:
+      encoding: UTF-8
+      string: "{\"id\":\"24997BFEE7AC89B5\",\"link\":{\"rel\":\"filtered\",\"href\":\"filtered\"}}"
+    http_version: 
+  recorded_at: Wed, 26 Mar 2014 13:49:43 GMT
+- request:
+    method: get
+    uri: https://api.sumologic.com/api/v1/search/jobs/24997BFEE7AC89B5
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - excon/0.32.1
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 26 Mar 2014 13:49:42 GMT
+      Strict-Transport-Security:
+      - max-age=15552000
+      Content-Length:
+      - '125'
+      Connection:
+      - Close
+    body:
+      encoding: UTF-8
+      string: "{\"state\":\"GATHERING RESULTS\",\"pendingWarnings\":[],\"pendingErrors\":[],\"histogramBuckets\":[],\"messageCount\":0,\"recordCount\":-1}"
+    http_version: 
+  recorded_at: Wed, 26 Mar 2014 13:49:43 GMT
+recorded_with: VCR 2.8.0
