@@ -69,14 +69,12 @@ class Sumo::Client
   private :default_headers
 
   def encoded_creds
-    @encoded_creds ||= Base64.encode64(creds).strip
+    @encoded_creds ||= Base64.urlsafe_encode64(creds).strip
   end
   private :encoded_creds
 
   def connection
-    @connection ||= Excon.new(
-      'https://api.sumologic.com'
-    )
+    @connection ||= Excon.new('https://api.sumologic.com')
   end
   private :connection
 end
