@@ -2,12 +2,13 @@ require 'base64'
 require 'clamp'
 require 'excon'
 require 'json'
+require 'yaml'
 
 # This is the top level module for the gem. It is used as a namespace and holds
 # top-level convenience functions.
 module Sumo
   # Define global constants.
-  DEFAULT_CONFIG_FILE = File.expand_path('~/.sumo_creds').freeze
+  CONFIG_FILE = File.expand_path('~/.sumo_creds').freeze
 
   # Require sub-modules.
   require 'sumo/error'

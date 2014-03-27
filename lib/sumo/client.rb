@@ -2,14 +2,15 @@
 class Sumo::Client
   include Sumo::Error
 
-  attr_reader :creds, :cookie
+  attr_reader :email, :password, :cookie
 
   # The error message raised when the result can be parsed from Sumo.
   DEFAULT_ERROR_MESSAGE = 'Error sending API request'
 
   # Create a new `Sumo::Client` with the given credentials.
-  def initialize(creds = Sumo.creds)
-    @creds = creds.freeze
+  def initialize(credentials = Sumo.creds)
+    @email = credentials['email'].freeze
+    @password = credentials['password'].freeze
   end
 
   # Send a HTTP request to the server, handling any errors that may occur.
@@ -72,6 +73,11 @@ class Sumo::Client
     @encoded_creds ||= Base64.urlsafe_encode64(creds).strip
   end
   private :encoded_creds
+
+  def creds
+    [email, password].join(':')
+  end
+  private :creds
 
   def connection
     @connection ||= Excon.new('https://api.sumologic.com')
