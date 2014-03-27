@@ -1,5 +1,7 @@
 # sumo-search
 
+[![Gem Version](https://badge.fury.io/rb/sumo-search.png)](http://badge.fury.io/rb/sumo-search) [![Build Status](https://travis-ci.org/swipely/sumo.svg?branch=add-fog-style-credential-loading)](https://travis-ci.org/swipely/sumo) [![Code Climate](https://codeclimate.com/github/swipely/sumo.png)](https://codeclimate.com/github/swipely/sumo) [![Dependency Status](https://gemnasium.com/swipely/sumo-search.svg)](https://gemnasium.com/swipely/sumo-search)
+
 This gem interfaces with the Sumo Logic [Search Job API](https://github.com/SumoLogic/sumo-api-doc/wiki/search-job-api).
 It may be used through native Ruby, or via a CLI that has been provided.
 
