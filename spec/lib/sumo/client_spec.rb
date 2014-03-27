@@ -2,13 +2,20 @@ require 'spec_helper'
 
 describe Sumo::Client do
   describe '#initialize' do
-    let(:creds) { 'email@email.email:password' }
+    let(:creds) {
+      {
+        'email' => 'test@test.com',
+        'password' => 'example'
+      }
+    }
 
     context 'with no arguments' do
       subject { Sumo::Client.new }
       before { Sumo.stub(:creds).and_return(creds) }
+
       it 'sets the default credentials' do
-        subject.creds.should == creds
+        subject.email.should == 'test@test.com'
+        subject.password.should == 'example'
       end
     end
 
@@ -16,7 +23,8 @@ describe Sumo::Client do
       subject { Sumo::Client.new(creds) }
 
       it 'sets the credentials to that argument' do
-        subject.creds.should == creds
+        subject.email.should == 'test@test.com'
+        subject.password.should == 'example'
       end
     end
   end
@@ -24,8 +32,13 @@ describe Sumo::Client do
   describe '#request' do
     let(:connection) { double(:connection) }
     let(:response) { double(:response) }
-    let(:creds) { 'creds@email.com:test' }
-    let(:encoded) { Base64.encode64(creds).strip }
+    let(:creds) {
+      {
+        'email' => 'creds@email.com',
+        'password' => 'test'
+      }
+    }
+    let(:encoded) { Base64.encode64('creds@email.com:test').strip }
     subject { Sumo::Client.new(creds) }
     before { subject.stub(:connection).and_return(connection) }
 
