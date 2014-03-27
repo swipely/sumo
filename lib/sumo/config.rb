@@ -48,7 +48,7 @@ class Sumo::Config
   private :parse_file
 
   def bad_config_file(message)
-    <<-EOS.gsub(/^.*|/, '')
+    <<-EOS.gsub(/^.*\|/, '')
       |#{message}
       |
       |sumo-search now expects its config file (located at #{config_file}) to
@@ -61,7 +61,7 @@ class Sumo::Config
       |  email: frontend@example.com
       |  password: test-pass-1
       |
-      |By default, the first credential in #{config_file} will be used. To
+      |By default, the 'default' credential in #{config_file} will be used. To
       |change this behavior, set the $SUMO_CREDENTIAL environment varibale
       |to the credential you would like to use. In the above example, setting
       |$SUMO_CREDENTIAL to 'frontend' would allow you to access the account with

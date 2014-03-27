@@ -8,17 +8,30 @@ class Sumo::CLI < Clamp::Command
   option ['-r', '--records'], :flag, 'Extract records instead of messages.'
   option ['-v', '--version'], :flag, 'Print the version.'
 
+  banner <<-EOS.gsub(/^.*\|/, '')
+    |Example
+    |
+    |Search for all of the logs containing 'HealthMetrics' on March 4, 2014,
+    |extracting the message key from the response:
+    |
+    |sumo --query HealthMetrics \\
+    |     --from 2014-03-14T00:00:00 \\
+    |     --to 2014-03-15T00:00:00 \\
+    |     --time-zone EST \\
+    |     --extract-key message
+  EOS
+
   # This method is called when the CLI is run.
   def execute
     if version?
       puts Sumo::VERSION
     elsif records?
-      search.records.each { |record| puts record }
+      search.records.each { |record| $stdout.puts record }
     else
-      search.messages.each { |message| puts format_message(message) }
+      search.messages.each { |message| $stdout.puts format_message(message) }
     end
   rescue StandardError => ex
-    puts "#{ex.class}: #{ex.message}"
+    $stderr.puts "#{ex.class}: #{ex.message}"
     exit 1
   end
 
