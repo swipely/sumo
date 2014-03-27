@@ -2,6 +2,7 @@ require 'base64'
 require 'clamp'
 require 'excon'
 require 'json'
+require 'yaml'
 
 # This is the top level module for the gem. It is used as a namespace and holds
 # top-level convenience functions.
