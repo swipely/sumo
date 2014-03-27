@@ -17,6 +17,23 @@ From your application's `Gemfile`:
 gem 'sumo-search'
 ```
 
+## Configuration
+
+Your credentials go into the YAML file `~/.sumo_creds`.
+An example YAML file is listed below:
+
+```yaml
+backend:
+  email: email@test.net
+  password: trustno1
+default:
+  email: email2@test.net
+  password: test-pass
+```
+
+The credentials in the `default` namespace are loaded by default.
+To change this, set `ENV['SUMO_CREDENTIAL']` to the credential that you would like to load.
+
 ## Ruby Usage
 
 To create a search job from ruby, the `Sumo.search` method is provided.
