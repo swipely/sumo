@@ -15,7 +15,7 @@ describe Sumo::Config do
   end
 
   describe '#file_specified?' do
-    context 'when Sumo::DEFAULT_CONFIG_FILE is not equal to @config_file' do
+    context 'when Sumo::CONFIG_FILE is not equal to @config_file' do
       let(:config_file) { '/etc/sumo-creds' }
       subject { Sumo::Config.new(config_file) }
 
@@ -24,7 +24,7 @@ describe Sumo::Config do
       end
     end
 
-    context 'when Sumo::DEFAULT_CONFIG_FILE is equal to @config_file' do
+    context 'when Sumo::CONFIG_FILE is equal to @config_file' do
       subject { Sumo::Config.new }
 
       it 'returns false' do
