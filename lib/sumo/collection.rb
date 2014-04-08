@@ -17,21 +17,11 @@ class Sumo::Collection
   # Iterate through each member of the collection, lazily making HTTP requests
   # to get the next member. If no block is given, an `Enumerator` is returned.
   def each(&block)
-    if block.nil?
-      enumerator
-    else
-      enumerator.each { |value| block.call(value) }
-      self
-    end
+    return enum_for(:each) if block.nil?
+    page.each { |value| block.call(value) }
+    remaining.each { |value| block.call(value) } if has_next_page?
+    self
   end
-
-  def enumerator
-    @enumerator ||= Enumerator.new do |values|
-      page.each { |value| values << value }
-      remaining.each { |value| values << value } if has_next_page?
-    end
-  end
-  private :enumerator
 
   def values(hash)
     @get_values.call(hash)
@@ -71,6 +61,7 @@ class Sumo::Collection
   def has_results?
     limit > 0
   end
+  private :has_results?
 
   def limit
     @limit ||= begin

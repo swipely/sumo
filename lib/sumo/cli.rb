@@ -8,11 +8,11 @@ class Sumo::CLI < Clamp::Command
   option ['-r', '--records'], :flag, 'Extract records instead of messages.'
   option ['-v', '--version'], :flag, 'Print the version.'
 
-  banner <<-EOS.gsub(/^.*\|/, '')
+  banner <<-EOS.gsub(/^\s+\|/, '')
     |Example
     |
     |Search for all of the logs containing 'HealthMetrics' on March 4, 2014,
-    |extracting the message key from the response:
+    |extracting the 'message' key from the response:
     |
     |sumo --query HealthMetrics \\
     |     --from 2014-03-14T00:00:00 \\
@@ -24,23 +24,21 @@ class Sumo::CLI < Clamp::Command
   # This method is called when the CLI is run.
   def execute
     if version?
-      puts Sumo::VERSION
+      $stdout.puts Sumo::VERSION
     elsif records?
       search.records.each { |record| $stdout.puts record }
     else
-      search.messages.each { |message| $stdout.puts format_message(message) }
+      search.messages.each { |msg| $stdout.puts format_message(msg['_raw']) }
     end
   rescue StandardError => ex
     $stderr.puts "#{ex.class}: #{ex.message}"
     exit 1
   end
 
-  def format_message(message)
-    if extract_key.nil?
-      message['_raw']
-    else
-      JSON.parse(message['_raw'])[extract_key]
-    end
+  def format_message(raw)
+    JSON.parse(raw)[extract_key] || raw
+  rescue StandardError
+    raw
   end
   private :format_message
 

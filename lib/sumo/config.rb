@@ -48,7 +48,7 @@ class Sumo::Config
   private :parse_file
 
   def bad_config_file(message)
-    <<-EOS.gsub(/^.*\|/, '')
+    <<-EOS.gsub(/^\s+\|/, '')
       |#{message}
       |
       |sumo-search now expects its config file (located at #{config_file}) to

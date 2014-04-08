@@ -21,9 +21,9 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 26 Mar 2014 13:49:42 GMT
+      - Tue, 08 Apr 2014 15:34:12 GMT
       Location:
-      - http://api.sumologic.com/api/v1/search/jobs/33B261D0A456467D
+      - http://api.sumologic.com/api/v1/search/jobs/452E2B11B758D3D8
       Strict-Transport-Security:
       - max-age=15552000
       Content-Length:
@@ -32,12 +32,12 @@ http_interactions:
       - Close
     body:
       encoding: UTF-8
-      string: "{\"id\":\"33B261D0A456467D\",\"link\":{\"rel\":\"filtered\",\"href\":\"filtered\"}}"
+      string: "{\"id\":\"452E2B11B758D3D8\",\"link\":{\"rel\":\"filtered\",\"href\":\"filtered\"}}"
     http_version: 
-  recorded_at: Wed, 26 Mar 2014 13:49:43 GMT
+  recorded_at: Tue, 08 Apr 2014 15:34:07 GMT
 - request:
     method: delete
-    uri: https://api.sumologic.com/api/v1/search/jobs/33B261D0A456467D
+    uri: https://api.sumologic.com/api/v1/search/jobs/452E2B11B758D3D8
     body:
       encoding: US-ASCII
       string: ''
@@ -56,21 +56,21 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 26 Mar 2014 13:49:42 GMT
+      - Tue, 08 Apr 2014 15:34:13 GMT
       Strict-Transport-Security:
       - max-age=15552000
-      Content-Length:
-      - '25'
+      transfer-encoding:
+      - ''
       Connection:
       - Close
     body:
       encoding: UTF-8
-      string: "{\"id\":\"33B261D0A456467D\"}"
+      string: "{\"id\":\"452E2B11B758D3D8\"}"
     http_version: 
-  recorded_at: Wed, 26 Mar 2014 13:49:43 GMT
+  recorded_at: Tue, 08 Apr 2014 15:34:08 GMT
 - request:
     method: get
-    uri: https://api.sumologic.com/api/v1/search/jobs/33B261D0A456467D
+    uri: https://api.sumologic.com/api/v1/search/jobs/452E2B11B758D3D8
     body:
       encoding: US-ASCII
       string: ''
@@ -89,14 +89,14 @@ http_interactions:
       Content-Type:
       - application/json; charset=ISO-8859-1
       Date:
-      - Wed, 26 Mar 2014 13:49:42 GMT
+      - Tue, 08 Apr 2014 15:34:13 GMT
       Content-Length:
       - '124'
       Connection:
       - Close
     body:
       encoding: UTF-8
-      string: "{\"status\":404,\"id\":\"XMQNV-4J2LJ-BVXPU\",\"code\":\"filtered\",\"message\":\"filtered\"}"
+      string: "{\"status\":404,\"id\":\"A49JI-O54IC-C39UJ\",\"code\":\"filtered\",\"message\":\"filtered\"}"
     http_version: 
-  recorded_at: Wed, 26 Mar 2014 13:49:43 GMT
+  recorded_at: Tue, 08 Apr 2014 15:34:08 GMT
 recorded_with: VCR 2.8.0
