@@ -2,7 +2,7 @@
 module Sumo
   MAJOR = 2
   MINOR = 0
-  PATCH = 0
+  PATCH = 1
   RELEASE = nil
 
   VERSION = [MAJOR, MINOR, PATCH, RELEASE].compact.join('.')
