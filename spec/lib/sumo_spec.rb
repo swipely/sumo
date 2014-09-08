@@ -20,7 +20,7 @@ describe Sumo do
   describe '.creds' do
     subject { Sumo.creds }
 
-    it { should be_a(Hash) }
+    it { should_not be_nil }
   end
 
   describe '.creds=' do
