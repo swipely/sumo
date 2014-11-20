@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = %w{tomhulihan@swipely.com}
   gem.description   = %q{A simple REST client for the Sumo Search Job API}
   gem.summary       = %q{A simple REST client for the Sumo Search Job API}
-  gem.homepage      = 'https://github.com/swipely/sumo-job'
+  gem.homepage      = 'https://github.com/swipely/sumo'
   gem.license       = 'MIT'
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
