@@ -1,7 +1,13 @@
 require 'spec_helper'
 
 describe Sumo::Search do
-  before { Sumo.creds rescue Sumo.creds = 'fake@creds.com:password' }
+  before do
+    begin
+      Sumo.creds
+    rescue
+      Sumo.creds = 'fake@creds.com:password'
+    end
+  end
 
   describe '.create' do
     let(:params) do
