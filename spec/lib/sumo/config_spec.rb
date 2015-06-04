@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Sumo::Config, :current do
-  let(:test_config_file) {
+  let(:test_config_file) do
     File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'sumo-creds')
-  }
+  end
 
   describe '#initialize' do
     let(:config_file) { '/etc/sumo-creds' }
@@ -24,12 +24,12 @@ describe Sumo::Config, :current do
     end
 
     context 'when #load_creds! does not raise an error' do
-      let(:creds) {
+      let(:creds) do
         {
           email: 'test@example.com',
           password: 'canthackthis'
         }
-      }
+      end
       before { subject.stub(:load_creds!).and_return(creds) }
 
       it 'returns its return value' do
@@ -52,9 +52,9 @@ describe Sumo::Config, :current do
 
     context 'when the config file does exist' do
       context 'when the file is not valid YAML' do
-        let(:test_config_file) {
+        let(:test_config_file) do
           File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'bad-creds')
-        }
+        end
 
         it 'raises an error' do
           expect { subject.load_creds! }
@@ -74,12 +74,12 @@ describe Sumo::Config, :current do
         end
 
         context 'when the specified key can be found' do
-          let(:expected) {
+          let(:expected) do
             {
               'email' => 'test@example.com',
               'password' => 'trustno1'
             }
-          }
+          end
           before { ENV['SUMO_CREDENTIAL'] = 'engineering' }
           after { ENV['SUMO_CREDENTIAL'] = nil }
 

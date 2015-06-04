@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Sumo::Client do
   describe '#initialize' do
-    let(:creds) {
+    let(:creds) do
       {
         'email' => 'test@test.com',
         'password' => 'example'
       }
-    }
+    end
 
     context 'with no arguments' do
       subject { Sumo::Client.new }
@@ -32,12 +32,12 @@ describe Sumo::Client do
   describe '#request' do
     let(:connection) { double(:connection) }
     let(:response) { double(:response) }
-    let(:creds) {
+    let(:creds) do
       {
         'email' => 'creds@email.com',
         'password' => 'test'
       }
-    }
+    end
     let(:encoded) { Base64.encode64('creds@email.com:test').strip }
     subject { Sumo::Client.new(creds) }
     before { subject.stub(:connection).and_return(connection) }
@@ -62,9 +62,9 @@ describe Sumo::Client do
       let(:body) { 'TEST RESULT' }
       let(:cookie) { 'oreo' }
       let(:headers) { {'Set-Cookie' => cookie } }
-      let(:response) {
+      let(:response) do
         double(:response, status: 200, body: body, headers: headers)
-      }
+      end
       before { connection.stub(:request).and_return(response) }
 
       it 'returns the response body' do

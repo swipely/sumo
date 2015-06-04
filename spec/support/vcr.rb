@@ -3,11 +3,10 @@ require 'vcr'
 module Helper
   def sanitize_body(body)
     body = JSON.parse(body) unless body.is_a?(Hash)
-    Hash[
-      body.map { |key, val|
-        [key, sanitize_json(val, %w(state id).include?(key))]
-      }
-    ]
+    sanitized = body.map do |key, val|
+      [key, sanitize_json(val, %w(state id).include?(key))]
+    end
+    Hash[sanitized]
   rescue
     body
   end

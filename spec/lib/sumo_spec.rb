@@ -53,14 +53,14 @@ describe Sumo do
   end
 
   describe '.search' do
-    let(:params) {
+    let(:params) do
       {
         query: '| count _sourceCategory',
         from: '2014-01-01T00:00:00',
         to: '2014-01-04T00:00:00',
         time_zone: 'EST'
       }
-    }
+    end
     subject { Sumo.search(params) }
 
     it 'creates a new Sumo::Search', :vcr do
