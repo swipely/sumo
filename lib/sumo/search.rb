@@ -31,8 +31,8 @@ module Sumo
     # Return an `Enumerator` containing each message found by the search.
     def messages
       @messages ||= Collection.new(
-        get_values: proc { |hash| self.get_messages(hash) },
-        get_status: proc { self.status },
+        get_values: method(:get_messages),
+        get_status: method(:status),
         count_key: 'messageCount'
       ).each
     end
@@ -40,8 +40,8 @@ module Sumo
     # Return an `Enumerator` containing each record found by the search.
     def records
       @records ||= Collection.new(
-        get_values: proc { |hash| self.get_records(hash) },
-        get_status: proc { self.status },
+        get_values: method(:get_records),
+        get_status: method(:status),
         count_key: 'recordCount'
       ).each
     end
