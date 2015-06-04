@@ -20,7 +20,7 @@ module Sumo
     def each(&block)
       return enum_for(:each) if block.nil?
       page.each { |value| block.call(value) }
-      remaining.each { |value| block.call(value) } if has_next_page?
+      remaining.each { |value| block.call(value) } if next_page?
       self
     end
 
@@ -30,11 +30,11 @@ module Sumo
     private :values
 
     def status
-      @status ||= get_new_status
+      @status ||= load_status
     end
     private :status
 
-    def get_new_status
+    def load_status
       stat = { 'state' => '', @count_key => @offset }
       until (@offset < stat[@count_key]) || stat['state'].start_with?('DONE')
         stat = @get_status.call
@@ -42,7 +42,7 @@ module Sumo
       end
       stat
     end
-    private :get_new_status
+    private :load_status
 
     def total
       status[@count_key]
@@ -55,14 +55,14 @@ module Sumo
     private :state
 
     def page
-      @page ||= has_results? ? values(offset: offset, limit: limit) : []
+      @page ||= results? ? values(offset: offset, limit: limit) : []
     end
     private :page
 
-    def has_results?
+    def results?
       limit > 0
     end
-    private :has_results?
+    private :results?
 
     def limit
       @limit ||= begin
@@ -72,10 +72,10 @@ module Sumo
     end
     private :limit
 
-    def has_next_page?
+    def next_page?
       ['GATHERING RESULTS', 'NOT STARTED'].include?(state)
     end
-    private :has_next_page?
+    private :next_page?
 
     def remaining
       @remaining ||= Collection.new(

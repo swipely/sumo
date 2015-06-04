@@ -4,6 +4,7 @@ module Sumo
     include Error
 
     attr_reader :email, :password, :cookie
+    attr_writer :cookie
 
     # The error message raised when the result can be parsed from Sumo.
     DEFAULT_ERROR_MESSAGE = 'Error sending API request'
@@ -18,7 +19,7 @@ module Sumo
     def request(hash, &block)
       response = connection.request(add_defaults(hash), &block)
       handle_errors!(response)
-      set_cookie!(response)
+      self.cookie = response.headers['Set-Cookie'] || cookie
       response.body
     end
 
@@ -50,11 +51,6 @@ module Sumo
       fail error, extract_error_message(response.body) if error
     end
     private :handle_errors!
-
-    def set_cookie!(response)
-      @cookie = response.headers['Set-Cookie'] || @cookie
-    end
-    private :set_cookie!
 
     def extract_error_message(body)
       JSON.parse(body)['message'] || DEFAULT_ERROR_MESSAGE
