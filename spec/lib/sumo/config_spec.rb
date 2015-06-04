@@ -26,8 +26,8 @@ describe Sumo::Config, :current do
     context 'when #load_creds! does not raise an error' do
       let(:creds) {
         {
-          :email => 'test@example.com',
-          :password => 'canthackthis'
+          email: 'test@example.com',
+          password: 'canthackthis'
         }
       }
       before { subject.stub(:load_creds!).and_return(creds) }

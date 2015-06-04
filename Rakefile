@@ -5,7 +5,7 @@ require 'sumo'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 
-task :default => [:spec, :quality]
+task default: [:spec, :quality]
 
 RSpec::Core::RakeTask.new(:spec)
 

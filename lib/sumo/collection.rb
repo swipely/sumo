@@ -54,7 +54,7 @@ class Sumo::Collection
   private :state
 
   def page
-    @page ||= has_results? ? values(:offset => offset, :limit => limit) : []
+    @page ||= has_results? ? values(offset: offset, limit: limit) : []
   end
   private :page
 
@@ -78,10 +78,10 @@ class Sumo::Collection
 
   def remaining
     @remaining ||= Sumo::Collection.new(
-      :offset => offset + limit,
-      :get_values => @get_values,
-      :get_status => @get_status,
-      :count_key => @count_key
+      offset: offset + limit,
+      get_values: @get_values,
+      get_status: @get_status,
+      count_key: @count_key
     )
   end
   private :remaining

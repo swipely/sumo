@@ -6,10 +6,10 @@ describe Sumo::Search do
   describe '.create' do
     let(:params) {
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-03-01T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-03-01T00:00:00',
+        time_zone: 'EST'
       }
     }
     subject { Sumo::Search.create(params) }
@@ -23,10 +23,10 @@ describe Sumo::Search do
   describe '#status' do
     let(:params) {
       {
-        :query => '| count _sourceCategory',
-        :from => '2013-01-01T00:00:00',
-        :to => '2014-03-01T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2013-01-01T00:00:00',
+        to: '2014-03-01T00:00:00',
+        time_zone: 'EST'
       }
     }
     let(:expected_keys) {
@@ -49,10 +49,10 @@ describe Sumo::Search do
   describe '#delete!' do
     let(:params) {
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-02-01T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-02-01T00:00:00',
+        time_zone: 'EST'
       }
     }
     subject { Sumo::Search.create(params) }
@@ -67,10 +67,10 @@ describe Sumo::Search do
   describe '#messages' do
     let(:params) {
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-01-07T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-01-07T00:00:00',
+        time_zone: 'EST'
       }
     }
     let(:messages) { subject.messages.to_a }
@@ -87,10 +87,10 @@ describe Sumo::Search do
   describe '#records' do
     let(:params) {
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-01-04T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-01-04T00:00:00',
+        time_zone: 'EST'
       }
     }
     let(:records) { subject.records.to_a }

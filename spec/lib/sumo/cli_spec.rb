@@ -66,7 +66,7 @@ describe Sumo::CLI do
       }
       let(:messages) { [{ '_raw' => 'first' }, { '_raw' => 'second' }] }
       let(:raw_messages) { messages.map { |message| message['_raw'] } }
-      let(:fake_search) { double(Sumo::Search, :messages => messages) }
+      let(:fake_search) { double(Sumo::Search, messages: messages) }
 
       before do
         Sumo.stub(:creds).and_return(creds)

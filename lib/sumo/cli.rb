@@ -43,12 +43,7 @@ class Sumo::CLI < Clamp::Command
   private :format_message
 
   def search
-    Sumo::Search.create(
-      :query => query,
-      :from => from,
-      :to => to,
-      :time_zone => time_zone
-    )
+    Sumo::Search.create(query: query, from: from, to: to, time_zone: time_zone)
   end
   private :search
 end

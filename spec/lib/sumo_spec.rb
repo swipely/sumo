@@ -55,10 +55,10 @@ describe Sumo do
   describe '.search' do
     let(:params) {
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-01-04T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-01-04T00:00:00',
+        time_zone: 'EST'
       }
     }
     subject { Sumo.search(params) }

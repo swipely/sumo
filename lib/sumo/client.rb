@@ -25,7 +25,7 @@ class Sumo::Client
   # #delete).
   [:get, :post, :delete].each do |http_method|
     define_method(http_method) do |hash, &block|
-      request(hash.merge(:method => http_method), &block)
+      request(hash.merge(method: http_method), &block)
     end
   end
 
@@ -33,8 +33,8 @@ class Sumo::Client
 
   def add_defaults(hash)
     hash.merge(
-      :headers => default_headers.merge(hash[:headers] || {}),
-      :path => "/api/v#{Sumo::API_VERSION}#{hash[:path]}"
+      headers: default_headers.merge(hash[:headers] || {}),
+      path: "/api/v#{Sumo::API_VERSION}#{hash[:path]}"
     )
   end
   private :add_defaults
