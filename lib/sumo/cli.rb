@@ -25,7 +25,7 @@ module Sumo
     # This method is called when the CLI is run.
     def execute
       perform
-    rescue StandardError => ex
+    rescue => ex
       $stderr.puts "#{ex.class}: #{ex.message}"
       exit 1
     end
@@ -44,7 +44,7 @@ module Sumo
 
     def format_message(msg)
       JSON.parse(msg['_raw'])[extract_key] || raw
-    rescue StandardError
+    rescue
       msg['_raw']
     end
 
