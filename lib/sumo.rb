@@ -19,16 +19,16 @@ module Sumo
   require 'sumo/cli'
   require 'sumo/version'
 
+  attr_writer :creds, :config, :client
+  module_function :creds=, :config=, :client=
+
   # Define top-level functions.
 
   module_function
 
+  # Credentials loaded from the configuration file.
   def creds
     @creds ||= config.load_creds!
-  end
-
-  def creds=(new_creds)
-    @creds = new_creds
   end
 
   # The default config for the gem.
@@ -36,19 +36,9 @@ module Sumo
     @config ||= Sumo::Config.new
   end
 
-  # Reset the default config for the gem.
-  def config=(new_config)
-    @config = new_config
-  end
-
   # The default client for the gem.
   def client
     @client ||= Sumo::Client.new
-  end
-
-  # Reset the default client for the gem.
-  def client=(new_client)
-    @client = new_client
   end
 
   # Create a new search.
