@@ -43,10 +43,10 @@ For example, the following creates a search job for everything from the 2014-01-
 
 ```ruby
 search = Sumo.search(
-  :query => '*',
-  :from => '2014-01-01T00:00:00',
-  :to => '2014-01-01T23:59:59',
-  :time_zone => 'UTC'
+  query: '*',
+  from: '2014-01-01T00:00:00',
+  to: '2014-01-01T23:59:59',
+  time_zone: 'UTC'
 )
 ```
 

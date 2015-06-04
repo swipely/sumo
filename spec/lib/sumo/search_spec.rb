@@ -1,17 +1,23 @@
 require 'spec_helper'
 
 describe Sumo::Search do
-  before { Sumo.creds rescue Sumo.creds = 'fake@creds.com:password' }
+  before do
+    begin
+      Sumo.creds
+    rescue
+      Sumo.creds = 'fake@creds.com:password'
+    end
+  end
 
   describe '.create' do
-    let(:params) {
+    let(:params) do
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-03-01T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-03-01T00:00:00',
+        time_zone: 'EST'
       }
-    }
+    end
     subject { Sumo::Search.create(params) }
 
     it 'sets the @id and @client', :vcr do
@@ -21,15 +27,15 @@ describe Sumo::Search do
   end
 
   describe '#status' do
-    let(:params) {
+    let(:params) do
       {
-        :query => '| count _sourceCategory',
-        :from => '2013-01-01T00:00:00',
-        :to => '2014-03-01T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2013-01-01T00:00:00',
+        to: '2014-03-01T00:00:00',
+        time_zone: 'EST'
       }
-    }
-    let(:expected_keys) {
+    end
+    let(:expected_keys) do
       %w(
         state
         pendingWarnings
@@ -38,7 +44,7 @@ describe Sumo::Search do
         messageCount
         recordCount
       ).sort
-    }
+    end
     subject { Sumo::Search.create(params) }
 
     it 'returns the status of the search', :vcr do
@@ -47,14 +53,14 @@ describe Sumo::Search do
   end
 
   describe '#delete!' do
-    let(:params) {
+    let(:params) do
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-02-01T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-02-01T00:00:00',
+        time_zone: 'EST'
       }
-    }
+    end
     subject { Sumo::Search.create(params) }
 
     before { subject.delete! }
@@ -65,14 +71,14 @@ describe Sumo::Search do
   end
 
   describe '#messages' do
-    let(:params) {
+    let(:params) do
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-01-07T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-01-07T00:00:00',
+        time_zone: 'EST'
       }
-    }
+    end
     let(:messages) { subject.messages.to_a }
     subject { Sumo::Search.create(params) }
 
@@ -85,14 +91,14 @@ describe Sumo::Search do
   end
 
   describe '#records' do
-    let(:params) {
+    let(:params) do
       {
-        :query => '| count _sourceCategory',
-        :from => '2014-01-01T00:00:00',
-        :to => '2014-01-04T00:00:00',
-        :time_zone => 'EST'
+        query: '| count _sourceCategory',
+        from: '2014-01-01T00:00:00',
+        to: '2014-01-04T00:00:00',
+        time_zone: 'EST'
       }
-    }
+    end
     let(:records) { subject.records.to_a }
     subject { Sumo::Search.create(params) }
 

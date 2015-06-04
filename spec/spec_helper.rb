@@ -6,5 +6,6 @@ CodeClimate::TestReporter.start unless ENV['CODECLIMATE_REPO_TOKEN'].nil?
 require 'rspec'
 require 'pry'
 require 'sumo'
+require 'English'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |file| require file }

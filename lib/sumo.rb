@@ -11,24 +11,24 @@ module Sumo
   CONFIG_FILE = File.expand_path('~/.sumo_creds').freeze
 
   # Require sub-modules.
-  require 'sumo/error'
-  require 'sumo/config'
-  require 'sumo/client'
-  require 'sumo/search'
-  require 'sumo/collection'
-  require 'sumo/cli'
-  require 'sumo/version'
+  autoload :CLI, 'sumo/cli'
+  autoload :Client, 'sumo/client'
+  autoload :Collection, 'sumo/collection'
+  autoload :Config, 'sumo/config'
+  autoload :Error, 'sumo/error'
+  autoload :Search, 'sumo/search'
+  autoload :VERSION, 'sumo/version'
+
+  attr_writer :creds, :config, :client
+  module_function :creds=, :config=, :client=
 
   # Define top-level functions.
 
   module_function
 
+  # Credentials loaded from the configuration file.
   def creds
     @creds ||= config.load_creds!
-  end
-
-  def creds=(new_creds)
-    @creds = new_creds
   end
 
   # The default config for the gem.
@@ -36,19 +36,9 @@ module Sumo
     @config ||= Sumo::Config.new
   end
 
-  # Reset the default config for the gem.
-  def config=(new_config)
-    @config = new_config
-  end
-
   # The default client for the gem.
   def client
     @client ||= Sumo::Client.new
-  end
-
-  # Reset the default client for the gem.
-  def client=(new_client)
-    @client = new_client
   end
 
   # Create a new search.
