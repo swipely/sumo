@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sumo::Config, :current do
+describe Sumo::Config do
   let(:test_config_file) do
     File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'sumo-creds')
   end
