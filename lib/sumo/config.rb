@@ -47,11 +47,12 @@ module Sumo
       nil
     end
 
+    private
+
     # Get the credentials from the environment.
     def cred_key
       @cred_key = ENV['SUMO_CREDENTIAL'] || 'default'
     end
-    private :cred_key
 
     # Get the credentials from the configuration file.
     def load_file
@@ -61,7 +62,6 @@ module Sumo
         fail NoCredsFound, bad_config_file("#{config_file} does not exist.")
       end
     end
-    private :load_file
 
     # Parse the configuration file, raising an error if it is invalid YAML.
     def parse_file
@@ -69,13 +69,11 @@ module Sumo
       return creds if creds.is_a?(Hash)
       fail NoCredsFound, bad_config_file("#{config_file} is not valid YAML.")
     end
-    private :parse_file
 
     def bad_config_file(message)
       BAD_CONFIG_FILE_MESSAGE
         .gsub(':message', message)
         .gsub(':config_file', config_file)
     end
-    private :bad_config_file
   end
 end

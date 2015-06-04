@@ -30,6 +30,8 @@ module Sumo
       exit 1
     end
 
+    private
+
     def perform
       if version?
         $stdout.puts VERSION
@@ -39,18 +41,15 @@ module Sumo
         search.messages.each { |msg| $stdout.puts format_message(msg) }
       end
     end
-    private :perform
 
     def format_message(msg)
       JSON.parse(msg['_raw'])[extract_key] || raw
     rescue StandardError
       msg['_raw']
     end
-    private :format_message
 
     def search
       Search.create(query: query, from: from, to: to, time_zone: time_zone)
     end
-    private :search
   end
 end

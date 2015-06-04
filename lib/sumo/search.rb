@@ -3,6 +3,8 @@ module Sumo
   class Search
     attr_reader :id, :client
 
+    private_class_method :new
+
     # Create a new search job with the given query.
     def self.create(params = {}, client = Sumo.client)
       params[:timeZone] ||= params.delete(:time_zone) || params.delete(:tz)
@@ -15,7 +17,6 @@ module Sumo
       @id = id
       @client = client
     end
-    private_class_method :new
 
     # Get the status of the search job.
     def status
@@ -58,14 +59,14 @@ module Sumo
       extract_response('records', resp)
     end
 
+    private
+
     def extract_response(key, resp)
       JSON.parse(resp)[key].map { |hash| hash['map'] }
     end
-    private :extract_response
 
     def base_path
       @base_path ||= "/search/jobs/#{id}"
     end
-    private :base_path
   end
 end

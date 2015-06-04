@@ -24,15 +24,15 @@ module Sumo
       self
     end
 
+    private
+
     def values(hash)
       @get_values.call(hash)
     end
-    private :values
 
     def status
       @status ||= load_status
     end
-    private :status
 
     def load_status
       stat = { 'state' => '', @count_key => @offset }
@@ -42,27 +42,22 @@ module Sumo
       end
       stat
     end
-    private :load_status
 
     def total
       status[@count_key]
     end
-    private :total
 
     def state
       status['state']
     end
-    private :state
 
     def page
       @page ||= results? ? values(offset: offset, limit: limit) : []
     end
-    private :page
 
     def results?
       limit > 0
     end
-    private :results?
 
     def limit
       @limit ||= begin
@@ -70,12 +65,10 @@ module Sumo
         (natural_limit <= 1000) ? natural_limit : 1000
       end
     end
-    private :limit
 
     def next_page?
       ['GATHERING RESULTS', 'NOT STARTED'].include?(state)
     end
-    private :next_page?
 
     def remaining
       @remaining ||= Collection.new(
@@ -85,6 +78,5 @@ module Sumo
         count_key: @count_key
       )
     end
-    private :remaining
   end
 end

@@ -33,13 +33,14 @@ module Sumo
 
     # Private functions that operate on the request and response.
 
+    private
+
     def add_defaults(hash)
       hash.merge(
         headers: default_headers.merge(hash[:headers] || {}),
         path: "/api/v#{API_VERSION}#{hash[:path]}"
       )
     end
-    private :add_defaults
 
     def handle_errors!(response)
       error =
@@ -50,14 +51,12 @@ module Sumo
         end
       fail error, extract_error_message(response.body) if error
     end
-    private :handle_errors!
 
     def extract_error_message(body)
       JSON.parse(body)['message'] || DEFAULT_ERROR_MESSAGE
     rescue
       DEFAULT_ERROR_MESSAGE
     end
-    private :extract_error_message
 
     def default_headers
       {
@@ -67,21 +66,17 @@ module Sumo
         'Accept' => 'application/json'
       }.reject { |_, value| value.nil? }
     end
-    private :default_headers
 
     def encoded_creds
       @encoded_creds ||= Base64.urlsafe_encode64(creds).strip
     end
-    private :encoded_creds
 
     def creds
       [email, password].join(':')
     end
-    private :creds
 
     def connection
       @connection ||= Excon.new('https://api.sumologic.com')
     end
-    private :connection
   end
 end
