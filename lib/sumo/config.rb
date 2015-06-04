@@ -15,13 +15,15 @@ module Sumo
     # Load the credentials, raising an any errors that occur.
     def load_creds!
       @creds ||= load_file[cred_key].tap do |creds|
-        raise NoCredsFound, "#{cred_key} not found in #{config_file}" if !creds
+        fail NoCredsFound, "#{cred_key} not found in #{config_file}" unless creds
       end
     end
 
     # Load the credentials, returning nil if an error occurs.
     def load_creds
-      load_creds! rescue nil
+      load_creds!
+    rescue
+      nil
     end
 
     # Get the credentials from the environment.
@@ -35,16 +37,16 @@ module Sumo
       if File.exists?(config_file)
         parse_file
       else
-        raise NoCredsFound, bad_config_file("#{config_file} does not exist.")
+        fail NoCredsFound, bad_config_file("#{config_file} does not exist.")
       end
     end
     private :load_file
 
     # Parse the configuration file, raising an error if it is invalid YAML.
     def parse_file
-      YAML.load_file(config_file).tap { |creds| raise unless creds.is_a?(Hash) }
-    rescue
-      raise NoCredsFound, bad_config_file("#{config_file} is not valid YAML.")
+      creds = YAML.load_file(config_file)
+      return creds if creds.is_a?(Hash)
+      fail NoCredsFound, bad_config_file("#{config_file} is not valid YAML.")
     end
     private :parse_file
 

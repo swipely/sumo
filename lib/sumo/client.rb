@@ -41,10 +41,13 @@ module Sumo
     private :add_defaults
 
     def handle_errors!(response)
-      case response.status
-      when 400..499 then raise ClientError, extract_error_message(response.body)
-      when 500..599 then raise ServerError, extract_error_message(response.body)
-      end
+      error =
+        if response.status.between?(400, 499)
+          ClientError
+        elsif response.status.between?(500, 599)
+          ServerError
+        end
+      fail error, extract_error_message(response.body) if error
     end
     private :handle_errors!
 
