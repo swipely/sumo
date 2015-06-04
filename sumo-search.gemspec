@@ -2,17 +2,17 @@
 require File.expand_path('../lib/sumo/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Swipely, Inc."]
-  gem.email         = %w{tomhulihan@swipely.com}
-  gem.description   = %q{A simple REST client for the Sumo Search Job API}
-  gem.summary       = %q{A simple REST client for the Sumo Search Job API}
+  gem.authors       = ['Swipely, Inc.']
+  gem.email         = %w(tomhulihan@swipely.com)
+  gem.description   = 'A simple REST client for the Sumo Search Job API'
+  gem.summary       = gem.description
   gem.homepage      = 'https://github.com/swipely/sumo'
   gem.license       = 'MIT'
-  gem.files         = `git ls-files`.split($\)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.files         = `git ls-files`.lines.to_a
+  gem.executables   = gem.files.grep(%r{^bin/}).map(&File.method(:basename))
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = 'sumo-search'
-  gem.require_paths = %w{lib}
+  gem.require_paths = %w(lib)
   gem.version       = Sumo::VERSION
   gem.add_dependency 'excon', '>= 0.32'
   gem.add_dependency 'clamp', '>= 0.6.3'
