@@ -61,7 +61,7 @@ describe Sumo::Client do
     context 'when a 2xx-level status code is returned by the API' do
       let(:body) { 'TEST RESULT' }
       let(:cookie) { 'oreo' }
-      let(:headers) { {'Set-Cookie' => cookie } }
+      let(:headers) { { 'Set-Cookie' => cookie } }
       let(:response) do
         double(:response, status: 200, body: body, headers: headers)
       end
