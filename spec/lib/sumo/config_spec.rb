@@ -10,13 +10,17 @@ describe Sumo::Config do
     subject { Sumo::Config.new(config_file) }
 
     it 'sets the @config_file instance variable' do
-      subject.config_file.should == config_file
+      expect(subject.config_file).to eq(config_file)
     end
   end
 
   describe '#load_creds' do
     context 'when #load_creds! raises an error' do
-      before { subject.stub(:load_creds!).and_raise(Sumo::Error::NoCredsFound) }
+      before do
+        allow(subject)
+          .to receive(:load_creds!)
+          .and_raise(Sumo::Error::NoCredsFound)
+      end
 
       it 'returns nil' do
         expect(subject.load_creds).to be_nil
@@ -30,7 +34,7 @@ describe Sumo::Config do
           password: 'canthackthis'
         }
       end
-      before { subject.stub(:load_creds!).and_return(creds) }
+      before { allow(subject).to receive(:load_creds!).and_return(creds) }
 
       it 'returns its return value' do
         expect(subject.load_creds).to eq(creds)
@@ -42,7 +46,7 @@ describe Sumo::Config do
     subject { Sumo::Config.new(test_config_file) }
 
     context 'when the config file does not exist' do
-      before { File.stub(:exists?).and_return(false) }
+      before { allow(File).to receive(:exist?).and_return(false) }
 
       it 'raises an error' do
         expect { subject.load_creds! }

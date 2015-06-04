@@ -21,8 +21,8 @@ describe Sumo::Search do
     subject { Sumo::Search.create(params) }
 
     it 'sets the @id and @client', :vcr do
-      subject.id.should_not be_nil
-      subject.client.should_not be_nil
+      expect(subject.id).to_not be nil
+      expect(subject.client).to_not be nil
     end
   end
 
@@ -48,7 +48,7 @@ describe Sumo::Search do
     subject { Sumo::Search.create(params) }
 
     it 'returns the status of the search', :vcr do
-      subject.status.keys.sort.should == expected_keys
+      expect(subject.status.keys.sort).to eq(expected_keys)
     end
   end
 
@@ -82,11 +82,11 @@ describe Sumo::Search do
     let(:messages) { subject.messages.to_a }
     subject { Sumo::Search.create(params) }
 
-    before { Sumo::Collection.any_instance.stub(:sleep) }
+    before { allow_any_instance_of(Sumo::Collection).to receive(:sleep) }
 
     it 'returns an Enumerator of each message in the search', :vcr do
-      messages.should be_all { |message| message.is_a?(Hash) }
-      messages.length.should == subject.status['messageCount']
+      expect(messages).to be_all { |message| message.is_a?(Hash) }
+      expect(messages.length).to eq(subject.status['messageCount'])
     end
   end
 
@@ -102,11 +102,11 @@ describe Sumo::Search do
     let(:records) { subject.records.to_a }
     subject { Sumo::Search.create(params) }
 
-    before { Sumo::Collection.any_instance.stub(:sleep) }
+    before { allow_any_instance_of(Sumo::Collection).to receive(:sleep) }
 
     it 'returns an Enumerator of each record in the search', :vcr do
-      records.should be_all { |record| record.is_a?(Hash) }
-      records.length.should == subject.status['recordCount']
+      expect(records).to be_all { |record| record.is_a?(Hash) }
+      expect(records.length).to eq(subject.status['recordCount'])
     end
   end
 end

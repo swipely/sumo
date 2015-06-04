@@ -2,52 +2,52 @@ require 'spec_helper'
 
 describe Sumo do
   describe '.config' do
-    subject { Sumo.config }
-
-    it { should be_a(Sumo::Config) }
+    it 'is an instance of Sumo::Config' do
+      expect(subject.config).to be_a(Sumo::Config)
+    end
   end
 
   describe '.config=' do
     let(:test_config) { double(:test_config) }
 
     it 'changes the config' do
-      expect { Sumo.config = test_config }
-        .to change { Sumo.config }
+      expect { subject.config = test_config }
+        .to change { subject.config }
         .to(test_config)
     end
   end
 
   describe '.creds' do
-    subject { Sumo.creds }
-
-    it { should_not be_nil }
+    it 'is present' do
+      expect(subject.creds).to_not be_nil
+    end
   end
 
   describe '.creds=' do
     let(:test_creds) { double(:creds) }
 
     it 'sets the creds' do
-      expect { Sumo.creds = test_creds }
-        .to change { Sumo.creds }
+      expect { subject.creds = test_creds }
+        .to change { subject.creds }
         .to(test_creds)
     end
   end
 
   describe '.client' do
-    subject { Sumo.client }
-
-    it { should be_a(Sumo::Client) }
+    it 'is a Sumo::Client' do
+      expect(subject.client).to be_a(Sumo::Client)
+    end
   end
 
   describe '.client=' do
-    let!(:original) { Sumo.client }
+    let!(:original) { subject.client }
     let(:test_client) { double(:client) }
 
-    after { Sumo.client = original }
+    after { subject.client = original }
 
     it 'sets the client' do
-      expect { Sumo.client = test_client }
-        .to change { Sumo.client }
+      expect { subject.client = test_client }
+        .to change { subject.client }
         .to(test_client)
     end
   end
@@ -61,10 +61,9 @@ describe Sumo do
         time_zone: 'EST'
       }
     end
-    subject { Sumo.search(params) }
 
     it 'creates a new Sumo::Search', :vcr do
-      expect(subject).to be_a(Sumo::Search)
+      expect(subject.search(params)).to be_a(Sumo::Search)
     end
   end
 end

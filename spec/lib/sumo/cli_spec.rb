@@ -33,7 +33,11 @@ describe Sumo::CLI do
   context 'when an incomplete query is passed' do
     let(:args) { ['-q', 'Some Query'] }
 
-    before { Sumo::Search.stub(:create).and_raise(Sumo::Error::ClientError) }
+    before do
+      allow(Sumo::Search)
+        .to receive(:create)
+        .and_raise(Sumo::Error::ClientError)
+    end
 
     it 'exits with status `1`' do
       pid = fork { subject.run(args) }
@@ -48,7 +52,11 @@ describe Sumo::CLI do
     end
 
     context 'when there are no credentials' do
-      before { Sumo.stub(:creds).and_raise(Sumo::Error::NoCredsFound) }
+      before do
+        allow(Sumo)
+          .to receive(:creds)
+          .and_raise(Sumo::Error::NoCredsFound)
+      end
 
       it 'exits with status `1`' do
         pid = fork { subject.run(args) }
@@ -69,8 +77,12 @@ describe Sumo::CLI do
       let(:fake_search) { double(Sumo::Search, messages: messages) }
 
       before do
-        Sumo.stub(:creds).and_return(creds)
-        Sumo::Search.stub(:create).and_return(fake_search)
+        allow(Sumo)
+          .to receive(:creds)
+          .and_return(creds)
+        allow(Sumo::Search)
+          .to receive(:create)
+          .and_return(fake_search)
       end
 
       it 'executes the query' do
