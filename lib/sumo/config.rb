@@ -14,9 +14,9 @@ module Sumo
 
     # Load the credentials, raising an any errors that occur.
     def load_creds!
-      @creds ||= load_file[cred_key].tap do |creds|
-        fail NoCredsFound, "#{cred_key} not found in #{config_file}" unless creds
-      end
+      @creds ||= load_file[cred_key]
+      fail NoCredsFound, "#{cred_key} not found in #{config_file}" unless @creds
+      @creds
     end
 
     # Load the credentials, returning nil if an error occurs.
