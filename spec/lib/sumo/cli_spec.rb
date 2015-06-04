@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Sumo::CLI do
-  subject { Sumo::CLI.new(File.expand_path(File.basename($0))) }
+  subject { Sumo::CLI.new(File.expand_path(File.basename($PROGRAM_NAME))) }
 
   around do |example|
     begin
@@ -38,7 +38,7 @@ describe Sumo::CLI do
     it 'exits with status `1`' do
       pid = fork { subject.run(args) }
       Process.wait(pid)
-      expect($?).to_not be_success
+      expect($CHILD_STATUS).to_not be_success
     end
   end
 
@@ -53,7 +53,7 @@ describe Sumo::CLI do
       it 'exits with status `1`' do
         pid = fork { subject.run(args) }
         Process.wait(pid)
-        expect($?).to_not be_success
+        expect($CHILD_STATUS).to_not be_success
       end
     end
 
