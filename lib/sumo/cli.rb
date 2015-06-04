@@ -24,22 +24,27 @@ module Sumo
 
     # This method is called when the CLI is run.
     def execute
-      if version?
-        $stdout.puts VERSION
-      elsif records?
-        search.records.each { |record| $stdout.puts record }
-      else
-        search.messages.each { |msg| $stdout.puts format_message(msg['_raw']) }
-      end
+      perform
     rescue StandardError => ex
       $stderr.puts "#{ex.class}: #{ex.message}"
       exit 1
     end
 
-    def format_message(raw)
-      JSON.parse(raw)[extract_key] || raw
+    def perform
+      if version?
+        $stdout.puts VERSION
+      elsif records?
+        search.records.each(&$stdout.method(:puts))
+      else
+        search.messages.each { |msg| $stdout.puts format_message(msg) }
+      end
+    end
+    private :perform
+
+    def format_message(msg)
+      JSON.parse(msg['_raw'])[extract_key] || raw
     rescue StandardError
-      raw
+      msg['_raw']
     end
     private :format_message
 

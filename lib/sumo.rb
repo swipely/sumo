@@ -11,13 +11,13 @@ module Sumo
   CONFIG_FILE = File.expand_path('~/.sumo_creds').freeze
 
   # Require sub-modules.
-  require 'sumo/error'
-  require 'sumo/config'
-  require 'sumo/client'
-  require 'sumo/search'
-  require 'sumo/collection'
-  require 'sumo/cli'
-  require 'sumo/version'
+  autoload :CLI, 'sumo/cli'
+  autoload :Client, 'sumo/client'
+  autoload :Collection, 'sumo/collection'
+  autoload :Config, 'sumo/config'
+  autoload :Error, 'sumo/error'
+  autoload :Search, 'sumo/search'
+  autoload :VERSION, 'sumo/version'
 
   attr_writer :creds, :config, :client
   module_function :creds=, :config=, :client=
