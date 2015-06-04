@@ -47,14 +47,14 @@ describe Sumo::Client do
       response.stub(:body)
       response.stub(:headers).and_return({})
       connection.should_receive(:request)
-                .with(
-                  method: :get,
-                  path: '/api/v1/',
-                  headers: {
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => "Basic #{encoded}" })
-                .and_return(response)
+        .with(
+          method: :get,
+          path: '/api/v1/',
+          headers: {
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => "Basic #{encoded}" })
+        .and_return(response)
       subject.request(method: :get, path: '/')
     end
 
@@ -74,15 +74,15 @@ describe Sumo::Client do
       it 'sets the cookie' do
         subject.request(method: :get, path: '/')
         connection.should_receive(:request)
-                  .with(
-                    method: :get,
-                    path: '/api/v1/',
-                    headers: {
-                      'Content-Type' => 'application/json',
-                      'Accept' => 'application/json',
-                      'Cookie' => cookie,
-                      'Authorization' => "Basic #{encoded}" })
-                  .and_return(response)
+          .with(
+            method: :get,
+            path: '/api/v1/',
+            headers: {
+              'Content-Type' => 'application/json',
+              'Accept' => 'application/json',
+              'Cookie' => cookie,
+              'Authorization' => "Basic #{encoded}" })
+          .and_return(response)
         subject.request(method: :get, path: '/')
       end
     end
@@ -105,8 +105,10 @@ describe Sumo::Client do
 
         it 'raises a ClientError with the default error message' do
           expect { subject.request(method: :delete, path: '/') }
-            .to raise_error(Sumo::Error::ClientError,
-                            Sumo::Client::DEFAULT_ERROR_MESSAGE)
+            .to raise_error(
+              Sumo::Error::ClientError,
+              Sumo::Client::DEFAULT_ERROR_MESSAGE
+            )
         end
       end
     end
@@ -129,8 +131,10 @@ describe Sumo::Client do
 
         it 'raises a ServerError with the default error message' do
           expect { subject.request(method: :delete, path: '/') }
-            .to raise_error(Sumo::Error::ServerError,
-                            Sumo::Client::DEFAULT_ERROR_MESSAGE)
+            .to raise_error(
+              Sumo::Error::ServerError,
+              Sumo::Client::DEFAULT_ERROR_MESSAGE
+            )
         end
       end
     end
