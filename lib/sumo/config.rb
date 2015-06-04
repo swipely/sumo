@@ -34,7 +34,7 @@ module Sumo
 
     # Get the credentials from the configuration file.
     def load_file
-      if File.exists?(config_file)
+      if File.exist?(config_file)
         parse_file
       else
         fail NoCredsFound, bad_config_file("#{config_file} does not exist.")
