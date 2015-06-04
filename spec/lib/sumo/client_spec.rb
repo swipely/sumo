@@ -14,8 +14,8 @@ describe Sumo::Client do
       before { Sumo.stub(:creds).and_return(creds) }
 
       it 'sets the default credentials' do
-        subject.email.should == 'test@test.com'
-        subject.password.should == 'example'
+        expect(subject.email).to eq('test@test.com')
+        expect(subject.password).to eq('example')
       end
     end
 
@@ -23,8 +23,8 @@ describe Sumo::Client do
       subject { Sumo::Client.new(creds) }
 
       it 'sets the credentials to that argument' do
-        subject.email.should == 'test@test.com'
-        subject.password.should == 'example'
+        expect(subject.email).to eq('test@test.com')
+        expect(subject.password).to eq('example')
       end
     end
   end
