@@ -3,14 +3,10 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
 require 'rake'
 require 'sumo'
 require 'rspec/core/rake_task'
-require 'cane/rake_task'
+require 'rubocop/rake_task'
 
-task :default => [:spec, :quality]
+task default: [:spec, :quality]
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = 'spec/**/*_spec.rb'
-end
+RSpec::Core::RakeTask.new(:spec)
 
-Cane::RakeTask.new(:quality) do |cane|
-  cane.canefile = '.cane'
-end
+RuboCop::RakeTask.new(:quality)

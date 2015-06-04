@@ -1,30 +1,32 @@
 require 'vcr'
 
-module Helper
-  def sanitize_body(body)
-    body = JSON.parse(body) unless body.is_a?(Hash)
-    Hash[
-      body.map { |key, val|
+module Sumo
+  # This module is used to sanitize the responses from the API for VCRs.
+  module VCRHelper
+    def sanitize_body(body)
+      body = JSON.parse(body) unless body.is_a?(Hash)
+      sanitized = body.map do |key, val|
         [key, sanitize_json(val, %w(state id).include?(key))]
-      }
-    ]
-  rescue
-    body
-  end
-  module_function :sanitize_body
-
-  def sanitize_json(json, do_not_filter = false)
-    if json.is_a?(Hash)
-      sanitize_body(json)
-    elsif json.is_a?(Array)
-      json.map { |value| sanitize_json(value) }
-    elsif do_not_filter || !json.is_a?(String)
-      json
-    else
-      'filtered'
+      end
+      Hash[sanitized]
+    rescue
+      body
     end
+    module_function :sanitize_body
+
+    def sanitize_json(json, do_not_filter = false)
+      if json.is_a?(Hash)
+        sanitize_body(json)
+      elsif json.is_a?(Array)
+        json.map { |value| sanitize_json(value) }
+      elsif do_not_filter || !json.is_a?(String)
+        json
+      else
+        'filtered'
+      end
+    end
+    module_function :sanitize_json
   end
-  module_function :sanitize_json
 end
 
 VCR.configure do |vcr|
@@ -39,6 +41,6 @@ VCR.configure do |vcr|
 
     interaction.response.headers.delete('Set-Cookie')
     interaction.response.body =
-      Helper.sanitize_body(interaction.response.body).to_json
+      Sumo::VCRHelper.sanitize_body(interaction.response.body).to_json
   end
 end
