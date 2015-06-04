@@ -4,6 +4,27 @@ module Sumo
   class Config
     include Error
 
+    # Message generated when there is an error with the config file.
+    BAD_CONFIG_FILE_MESSAGE = <<-EOS.gsub(/^\s+\|/, '')
+      |:message
+      |
+      |sumo-search now expects its config file (located at :config_file) to
+      |be valid YAML. Below is an example of a valid config file:
+      |
+      |backend:
+      |  email: backend@example.com
+      |  password: trustno1
+      |frontend:
+      |  email: frontend@example.com
+      |  password: test-pass-1
+      |
+      |By default, the 'default' credential in :config_file will be used. To
+      |change this behavior, set the $SUMO_CREDENTIAL environment varibale
+      |to the credential you would like to use. In the above example, setting
+      |$SUMO_CREDENTIAL to 'frontend' would allow you to access the account
+      |with the email 'frontend@example.com' and password 'test-pass-1'.
+    EOS
+
     attr_reader :config_file
 
     # Given an optional `String`, sets and freezes the `@config_file` instance
@@ -51,25 +72,9 @@ module Sumo
     private :parse_file
 
     def bad_config_file(message)
-      <<-EOS.gsub(/^\s+\|/, '')
-        |#{message}
-        |
-        |sumo-search now expects its config file (located at #{config_file}) to
-        |be valid YAML. Below is an example of a valid config file:
-        |
-        |backend:
-        |  email: backend@example.com
-        |  password: trustno1
-        |frontend:
-        |  email: frontend@example.com
-        |  password: test-pass-1
-        |
-        |By default, the 'default' credential in #{config_file} will be used. To
-        |change this behavior, set the $SUMO_CREDENTIAL environment varibale
-        |to the credential you would like to use. In the above example, setting
-        |$SUMO_CREDENTIAL to 'frontend' would allow you to access the account
-        |with the email 'frontend@example.com' and password 'test-pass-1'.
-      EOS
+      BAD_CONFIG_FILE_MESSAGE
+        .gsub(':message', message)
+        .gsub(':config_file', config_file)
     end
     private :bad_config_file
   end
