@@ -11,7 +11,11 @@ describe Sumo::Client do
 
     context 'with no arguments' do
       subject { Sumo::Client.new }
-      before { Sumo.stub(:creds).and_return(creds) }
+      before do
+        allow(Sumo)
+          .to receive(:creds)
+          .and_return(creds)
+      end
 
       it 'sets the default credentials' do
         expect(subject.email).to eq('test@test.com')
@@ -40,13 +44,17 @@ describe Sumo::Client do
     end
     let(:encoded) { Base64.encode64('creds@email.com:test').strip }
     subject { Sumo::Client.new(creds) }
-    before { subject.stub(:connection).and_return(connection) }
+    before do
+      allow(subject)
+        .to receive(:connection)
+        .and_return(connection)
+    end
 
     it 'sets the correct headers' do
-      subject.stub(:handle_errors!)
-      response.stub(:body)
-      response.stub(:headers).and_return({})
-      connection.should_receive(:request)
+      allow(subject).to receive(:handle_errors!)
+      allow(response).to receive(:body)
+      allow(response).to receive(:headers).and_return({})
+      expect(connection).to receive(:request)
         .with(
           method: :get,
           path: '/api/v1/',
@@ -65,15 +73,18 @@ describe Sumo::Client do
       let(:response) do
         double(:response, status: 200, body: body, headers: headers)
       end
-      before { connection.stub(:request).and_return(response) }
+      before do
+        allow(connection).to receive(:request).and_return(response)
+      end
 
       it 'returns the response body' do
-        subject.request(method: :get, path: '/').should == body
+        expect(subject.request(method: :get, path: '/')).to eq(body)
       end
 
       it 'sets the cookie' do
         subject.request(method: :get, path: '/')
-        connection.should_receive(:request)
+        allow(connection)
+          .to receive(:request)
           .with(
             method: :get,
             path: '/api/v1/',
@@ -91,7 +102,7 @@ describe Sumo::Client do
       let(:response) { double(:response, status: 400, body: body) }
       let(:body) { { 'message' => message }.to_json }
       let(:message) { 'Client Error' }
-      before { connection.stub(:request).and_return(response) }
+      before { allow(connection).to receive(:request).and_return(response) }
 
       context 'when a message can be parsed out of the response' do
         it 'raises a ClientError with that message' do
@@ -117,7 +128,7 @@ describe Sumo::Client do
       let(:response) { double(:response, status: 500, body: body) }
       let(:body) { { 'message' => message }.to_json }
       let(:message) { 'Server Error' }
-      before { connection.stub(:request).and_return(response) }
+      before { allow(connection).to receive(:request).and_return(response) }
 
       context 'when a message can be parsed out of the response' do
         it 'raises a ServerError with that message' do
@@ -145,7 +156,9 @@ describe Sumo::Client do
       subject { Sumo::Client.new('') }
 
       it "sends a request where the HTTP method is #{http_method}" do
-        subject.should_receive(:request).with(method: http_method)
+        allow(subject)
+          .to receive(:request)
+          .with(method: http_method)
         subject.public_send(http_method, {})
       end
     end

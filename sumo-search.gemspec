@@ -14,8 +14,8 @@ Gem::Specification.new do |gem|
   gem.name          = 'sumo-search'
   gem.require_paths = %w(lib)
   gem.version       = Sumo::VERSION
-  gem.add_dependency 'excon', '>= 0.32'
-  gem.add_dependency 'clamp', '>= 0.6.3'
+  gem.add_dependency 'excon', '~> 0.45.3'
+  gem.add_dependency 'clamp', '~> 0.6.5'
   gem.add_dependency 'json'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
