@@ -70,7 +70,7 @@ class Sumo::Client
   private :default_headers
 
   def encoded_creds
-    @encoded_creds ||= Base64.urlsafe_encode64(creds).strip
+    @encoded_creds ||= Base64.encode64(creds).gsub(/\s+/, '')
   end
   private :encoded_creds
 
