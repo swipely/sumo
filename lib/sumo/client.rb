@@ -80,6 +80,11 @@ class Sumo::Client
   private :creds
 
   def connection
+    unless @connection
+      defaults = Excon.defaults
+      defaults[:middlewares] << Excon::Middleware::RedirectFollower
+      Excon.defaults = defaults
+    end
     @connection ||= Excon.new('https://api.sumologic.com')
   end
   private :connection
