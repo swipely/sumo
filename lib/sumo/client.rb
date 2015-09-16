@@ -4,6 +4,8 @@ class Sumo::Client
 
   attr_reader :email, :password, :cookie
 
+  REDIRECT_STATUSES = [301, 302, 303, 307, 308]
+
   # The error message raised when the result can be parsed from Sumo.
   DEFAULT_ERROR_MESSAGE = 'Error sending API request'
 
@@ -11,14 +13,33 @@ class Sumo::Client
   def initialize(credentials = Sumo.creds)
     @email = credentials['email'].freeze
     @password = credentials['password'].freeze
+    @redirect_depth = 0
   end
 
   # Send a HTTP request to the server, handling any errors that may occur.
-  def request(hash, &block)
-    response = connection.request(add_defaults(hash), &block)
+  def request(hash, endpoint = nil, &block)
+    response = connection(endpoint).request(add_defaults(hash), &block)
+    handle_redirect!(response, hash, &block)
     handle_errors!(response)
     set_cookie!(response)
     response.body
+  end
+
+  def handle_redirect!(response, hash, &block)
+    if REDIRECT_STATUSES.include?(response.status) &&
+       response.headers['Location']
+      fail 'Too many redirects' if @redirect_depth > 9
+
+      _location, endpoint, _path = response.headers['Location']
+                                  .match(%r{(https://.+\.[a-z]+)(/.+)}).to_a
+
+      @redirect_depth += 1
+      # I tried to blindly follow redirection path, but it omits the job ID.
+      # hash[:path] = path
+      request(hash, endpoint, &block)
+    else
+      @redirect_depth = 0
+    end
   end
 
   # Define methods for the HTTP methods used by the API (#get, #post, and
@@ -79,13 +100,12 @@ class Sumo::Client
   end
   private :creds
 
-  def connection
-    unless @connection
-      defaults = Excon.defaults
-      defaults[:middlewares] << Excon::Middleware::RedirectFollower
-      Excon.defaults = defaults
+  def connection(endpoint = nil)
+    if endpoint && endpoint.match(%r{^https://.+\.sumologic.com})
+      Excon.new(endpoint)
+    else
+      @connection ||= Excon.new('https://api.sumologic.com')
     end
-    @connection ||= Excon.new('https://api.sumologic.com')
   end
   private :connection
 end
