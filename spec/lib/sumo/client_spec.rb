@@ -46,6 +46,7 @@ describe Sumo::Client do
       subject.stub(:handle_errors!)
       response.stub(:body)
       response.stub(:headers).and_return({})
+      response.stub(:status).and_return(200)
       connection.should_receive(:request)
                 .with(
                   :method => :get,

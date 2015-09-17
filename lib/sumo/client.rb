@@ -16,31 +16,27 @@ class Sumo::Client
     @redirect_depth = 0
   end
 
-  # Send a HTTP request to the server, handling any errors that may occur.
+  # Send a request to the API and retrieve processed data.
   def request(hash, endpoint = nil, &block)
-    response = connection(endpoint).request(add_defaults(hash), &block)
-    handle_redirect!(response, hash, &block)
-    handle_errors!(response)
-    set_cookie!(response)
-    response.body
+    handle_request(hash, endpoint, &block).body
   end
 
-  def handle_redirect!(response, hash, &block)
+  # Send a HTTP request to the server, handling any errors that may occur.
+  def handle_request(hash, endpoint = nil, &block)
+    response = connection(endpoint).request(add_defaults(hash), &block)
+
     if REDIRECT_STATUSES.include?(response.status) &&
        response.headers['Location']
-      fail 'Too many redirects' if @redirect_depth > 9
-
-      _location, endpoint, _path = response.headers['Location']
-                                  .match(%r{(https://.+\.[a-z]+)(/.+)}).to_a
-
-      @redirect_depth += 1
-      # I tried to blindly follow redirection path, but it omits the job ID.
-      # hash[:path] = path
-      request(hash, endpoint, &block)
+      response = handle_redirect(response, hash, &block)
     else
       @redirect_depth = 0
     end
+
+    handle_errors!(response)
+    set_cookie!(response)
+    response
   end
+  private :handle_request
 
   # Define methods for the HTTP methods used by the API (#get, #post, and
   # #delete).
@@ -53,12 +49,26 @@ class Sumo::Client
   # Private functions that operate on the request and response.
 
   def add_defaults(hash)
-    hash.merge(
-      :headers => default_headers.merge(hash[:headers] || {}),
-      :path => "/api/v#{Sumo::API_VERSION}#{hash[:path]}"
-    )
+    hash[:headers] = default_headers.merge(hash[:headers] || {})
+    hash[:path] = "/api/v#{Sumo::API_VERSION}#{hash[:path]}" unless
+      hash[:path].index("/api/v#{Sumo::API_VERSION}") == 0
+    hash
   end
   private :add_defaults
+
+  # Recursively handle redirection up to 10 level depth
+  def handle_redirect(response, hash, &block)
+    fail 'Too many redirects' if @redirect_depth > 9
+
+    endpoint = response.headers['Location']
+               .match(%r{^(https://.+\.[a-z]+)/}).to_a[1]
+
+    @redirect_depth += 1
+    # I tried to blindly follow redirection path, but it omits the job ID.
+    # hash[:path] = path
+    handle_request(hash, endpoint, &block)
+  end
+  private :handle_redirect
 
   def handle_errors!(response)
     case response.status
@@ -101,7 +111,7 @@ class Sumo::Client
   private :creds
 
   def connection(endpoint = nil)
-    if endpoint && endpoint.match(%r{^https://.+\.sumologic.com})
+    if endpoint && endpoint.match(%r{^https://.+\.sumologic.com$})
       Excon.new(endpoint)
     else
       @connection ||= Excon.new('https://api.sumologic.com')
