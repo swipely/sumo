@@ -112,7 +112,7 @@ class Sumo::Client
     endpoint ||= 'https://api.sumologic.com'
 
     fail 'Base url out of allowed domain.' unless
-      endpoint.match(%r{^https://.+\.sumologic.com$})
+      endpoint.match(%r{^https://.+\.sumologic\.com$})
     @connections[endpoint] ||= Excon.new(endpoint)
   end
   private :connection
