@@ -13,23 +13,20 @@ class Sumo::Client
   def initialize(credentials = Sumo.creds)
     @email = credentials['email'].freeze
     @password = credentials['password'].freeze
-    @redirect_depth = 0
   end
 
   # Send a request to the API and retrieve processed data.
-  def request(hash, endpoint = nil, &block)
-    handle_request(hash, endpoint, &block).body
+  def request(hash, &block)
+    handle_request(hash, &block).body
   end
 
   # Send a HTTP request to the server, handling any errors that may occur.
-  def handle_request(hash, endpoint = nil, &block)
+  def handle_request(hash, endpoint = nil, depth = 0, &block)
     response = connection(endpoint).request(add_defaults(hash), &block)
 
     if REDIRECT_STATUSES.include?(response.status) &&
        response.headers['Location']
-      response = handle_redirect(response, hash, &block)
-    else
-      @redirect_depth = 0
+      response = handle_redirect(response, hash, depth, &block)
     end
 
     handle_errors!(response)
@@ -57,16 +54,16 @@ class Sumo::Client
   private :add_defaults
 
   # Recursively handle redirection up to 10 level depth
-  def handle_redirect(response, hash, &block)
-    fail 'Too many redirects' if @redirect_depth > 9
+  def handle_redirect(response, hash, depth, &block)
+    fail 'Too many redirections.' if depth > 9
 
     endpoint = response.headers['Location']
                .match(%r{^(https://.+\.[a-z]+)/}).to_a[1]
 
-    @redirect_depth += 1
+    depth += 1
     # I tried to blindly follow redirection path, but it omits the job ID.
     # hash[:path] = path
-    handle_request(hash, endpoint, &block)
+    handle_request(hash, endpoint, depth, &block)
   end
   private :handle_redirect
 
@@ -111,11 +108,12 @@ class Sumo::Client
   private :creds
 
   def connection(endpoint = nil)
-    if endpoint && endpoint.match(%r{^https://.+\.sumologic.com$})
-      Excon.new(endpoint)
-    else
-      @connection ||= Excon.new('https://api.sumologic.com')
-    end
+    @connections ||= {}
+    endpoint ||= 'https://api.sumologic.com'
+
+    fail 'Base url out of allowed domain.' unless
+      endpoint.match(%r{^https://.+\.sumologic.com$})
+    @connections[endpoint] ||= Excon.new(endpoint)
   end
   private :connection
 end

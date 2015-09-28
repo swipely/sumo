@@ -135,6 +135,116 @@ describe Sumo::Client do
         end
       end
     end
+
+    context 'when a 3xx-level status code is returned by the API' do
+      let(:cookie) { 'oreo' }
+      let(:headers) { {'Set-Cookie' => cookie } }
+      let(:default_connection) { double(:default_connection) }
+      let(:redirect_connection) { double(:redirect_connection) }
+
+      before do
+        # Do not stub full connection method but only Excon.
+        subject.stub(:connection).and_call_original
+        default_connection.stub(:request).and_return(response)
+        allow(Excon).to receive(:new)
+          .with('https://api.sumologic.com').and_return default_connection
+        allow(Excon).to receive(:new)
+          .with('https://api.us2.sumologic.com').and_return redirect_connection
+      end
+
+      context 'and the redirection url is within sumologic domain' do
+        let(:response) do
+          double(:response, :status => 301, :body => '', :headers => {
+            'Location' => 'https://api.us2.sumologic.com/api/v1/jobs'
+          })
+        end
+        let(:final_response) do
+          double(:response, :status => 200, :body => '', :headers => {})
+        end
+
+        it 'should follow it' do
+          expect(default_connection).to receive(:request)
+                  .with(
+                    :method => :get,
+                    :path => '/api/v1/',
+                    :headers => {
+                      'Content-Type' => 'application/json',
+                      'Accept' => 'application/json',
+                      'Authorization' => "Basic #{encoded}" })
+                  .and_return(response)
+
+          expect(redirect_connection).to receive(:request)
+            .with(
+              :method => :get,
+              :path => '/api/v1/',
+              :headers => {
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => "Basic #{encoded}" })
+            .and_return(final_response)
+          subject.request(:method => :get, :path => '/')
+        end
+      end
+
+      context 'and the redirection url is outside of sumologic' do
+        let(:response) do
+          double(:response, :status => 301, :body => '', :headers => {
+            'Location' => 'https://donotfollow.me/api/v1/jobs'
+          })
+        end
+
+        it 'should not follow it' do
+          expect(default_connection).to receive(:request)
+                  .with(
+                    :method => :get,
+                    :path => '/api/v1/',
+                    :headers => {
+                      'Content-Type' => 'application/json',
+                      'Accept' => 'application/json',
+                      'Authorization' => "Basic #{encoded}" })
+                  .once
+                  .and_return(response)
+          expect do
+            subject.request(:method => :get, :path => '/')
+          end.to raise_error 'Base url out of allowed domain.'
+        end
+      end
+
+      context 'and there is a redirection loop' do
+        let(:response) do
+          double(:response, :status => 301, :body => '', :headers => {
+            'Location' => 'https://api.us2.sumologic.com/api/v1/jobs'
+          })
+        end
+
+        it 'should throw a too many redirections error' do
+          expect(default_connection).to receive(:request)
+                  .with(
+                    :method => :get,
+                    :path => '/api/v1/',
+                    :headers => {
+                      'Content-Type' => 'application/json',
+                      'Accept' => 'application/json',
+                      'Authorization' => "Basic #{encoded}" })
+                  .and_return(response)
+
+          expect(redirect_connection).to receive(:request)
+            .with(
+              :method => :get,
+              :path => '/api/v1/',
+              :headers => {
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => "Basic #{encoded}" })
+            .exactly(10).times
+            .and_return(response)
+
+          expect do
+            subject.request(:method => :get, :path => '/')
+          end.to raise_error 'Too many redirections.'
+        end
+      end
+    end
   end
 
   [:get, :post, :delete].each do |http_method|
