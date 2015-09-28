@@ -204,6 +204,8 @@ describe Sumo::Client do
                       'Authorization' => "Basic #{encoded}" })
                   .once
                   .and_return(response)
+          expect(Excon).not_to receive(:new)
+            .with('https://donotfollow.me')
           expect do
             subject.request(:method => :get, :path => '/')
           end.to raise_error 'Base url out of allowed domain.'
