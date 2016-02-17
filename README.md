@@ -19,6 +19,12 @@ From your application's `Gemfile`:
 gem 'sumo-search'
 ```
 
+Or you can `require` it using:
+
+```ruby
+require 'sumo'
+```
+
 ## Configuration
 
 Your credentials go into the YAML file `~/.sumo_creds`.
