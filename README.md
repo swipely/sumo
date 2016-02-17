@@ -19,7 +19,7 @@ From your application's `Gemfile`:
 gem 'sumo-search'
 ```
 
-Or you can `require` it using:
+After installing the gem, you can `require` it using:
 
 ```ruby
 require 'sumo'
