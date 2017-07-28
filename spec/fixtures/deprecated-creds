@@ -1,0 +1,3 @@
+default:
+  email: test@example.com
+  password: trustno1

@@ -30,15 +30,15 @@ require 'sumo'
 Your credentials go into the YAML file `~/.sumo_creds`.
 An example YAML file is listed below:
 
-Note: Sumo Logic [deprecated](https://help.sumologic.com/APIs/General-API-Information/API-Authentication) username/password login in favor of [access IDs and access keys](https://help.sumologic.com/Manage/Security/Access-Keys#Generate_Access_Keys). In place of your email use your access ID and in place of your password use your access key below.
+Note: Sumo Logic [deprecated](https://help.sumologic.com/APIs/General-API-Information/API-Authentication) username/password login in favor of [access IDs and access keys](https://help.sumologic.com/Manage/Security/Access-Keys#Generate_Access_Keys).
 
 ```yaml
 backend:
-  email: your_access_id
-  password: your_access_key
+  access_id: your_access_id
+  access_key: your_access_key
 default:
-  email: your_other_access_id
-  password: your_access_key
+  access_id: your_other_access_id
+  access_key: your_access_key
 ```
 
 The credentials in the `default` namespace are loaded by default.

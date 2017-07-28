@@ -5,6 +5,8 @@ class Sumo::Config
 
   attr_reader :config_file
 
+  DEPRECATED_KEYS = ['email', 'password']
+
   # Given an optional `String`, sets and freezes the `@config_file` instance
   # variable, as long as it's a valid file path.
   def initialize(config_file = Sumo::CONFIG_FILE)
@@ -41,11 +43,29 @@ class Sumo::Config
 
   # Parse the configuration file, raising an error if it is invalid YAML.
   def parse_file
-    YAML.load_file(config_file).tap { |creds| raise unless creds.is_a?(Hash) }
-  rescue
-    raise NoCredsFound, bad_config_file("#{config_file} is not valid YAML.")
+    YAML.load_file(config_file).tap do |creds|
+      if !creds.is_a?(Hash)
+        raise NoCredsFound, bad_config_file("#{config_file} is not valid YAML.")
+      elsif contains_deprecated_keys(creds)
+        raise EmailPasswordDeprecated.new(
+          bad_config_file(
+            'Email and password login is deprecated.'\
+            ' Use access_id and access_key instead.'
+          )
+        )
+      end
+    end
   end
   private :parse_file
+
+  def contains_deprecated_keys(config)
+    if config[cred_key]
+      (config[cred_key].keys & DEPRECATED_KEYS).any?
+    else
+      false
+    end
+  end
+  private :contains_deprecated_keys
 
   def bad_config_file(message)
     <<-EOS.gsub(/^\s+\|/, '')
@@ -55,17 +75,17 @@ class Sumo::Config
       |be valid YAML. Below is an example of a valid config file:
       |
       |backend:
-      |  email: backend@example.com
-      |  password: trustno1
+      |  access_id: abc123
+      |  access_key: def456
       |frontend:
-      |  email: frontend@example.com
-      |  password: test-pass-1
+      |  access_id: ghi789
+      |  access_key: jkl321
       |
       |By default, the 'default' credential in #{config_file} will be used. To
       |change this behavior, set the $SUMO_CREDENTIAL environment varibale
       |to the credential you would like to use. In the above example, setting
       |$SUMO_CREDENTIAL to 'frontend' would allow you to access the account with
-      |email 'frontend@example.com' and password 'test-pass-1'.
+      |access_id 'ghi789' and access_key 'jkl321'.
     EOS
   end
   private :bad_config_file

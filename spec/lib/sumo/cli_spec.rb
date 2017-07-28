@@ -60,8 +60,8 @@ describe Sumo::CLI do
     context 'when there are credentials' do
       let(:creds) {
         {
-          'email' => 'test@email.net',
-          'password' => 'sumo'
+          'access_id' => 'test',
+          'access_key' => 'sumo'
         }
       }
       let(:messages) { [{ '_raw' => 'first' }, { '_raw' => 'second' }] }

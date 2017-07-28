@@ -2,7 +2,7 @@
 class Sumo::Client
   include Sumo::Error
 
-  attr_reader :email, :password, :cookie
+  attr_reader :access_id, :access_key, :cookie
 
   REDIRECT_STATUSES = [301, 302, 303, 307, 308]
 
@@ -11,8 +11,8 @@ class Sumo::Client
 
   # Create a new `Sumo::Client` with the given credentials.
   def initialize(credentials = Sumo.creds)
-    @email = credentials['email'].freeze
-    @password = credentials['password'].freeze
+    @access_id = credentials['access_id'].freeze
+    @access_key = credentials['access_key'].freeze
   end
 
   # Send a request to the API and retrieve processed data.
@@ -103,7 +103,7 @@ class Sumo::Client
   private :encoded_creds
 
   def creds
-    [email, password].join(':')
+    [access_id, access_key].join(':')
   end
   private :creds
 
