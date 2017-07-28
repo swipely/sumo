@@ -12,4 +12,7 @@ module Sumo::Error
 
   # Raised when a 5xx-level response is returned by the API.
   class ServerError < BaseError; end
+
+  # Raised when credentials contain deprecated keys
+  class EmailPasswordDeprecated < BaseError; end
 end

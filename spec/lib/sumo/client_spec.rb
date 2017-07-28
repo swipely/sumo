@@ -4,8 +4,8 @@ describe Sumo::Client do
   describe '#initialize' do
     let(:creds) {
       {
-        'email' => 'test@test.com',
-        'password' => 'example'
+        'access_id' => 'test',
+        'access_key' => 'example'
       }
     }
 
@@ -14,8 +14,8 @@ describe Sumo::Client do
       before { Sumo.stub(:creds).and_return(creds) }
 
       it 'sets the default credentials' do
-        subject.email.should == 'test@test.com'
-        subject.password.should == 'example'
+        subject.access_id.should == 'test'
+        subject.access_key.should == 'example'
       end
     end
 
@@ -23,8 +23,8 @@ describe Sumo::Client do
       subject { Sumo::Client.new(creds) }
 
       it 'sets the credentials to that argument' do
-        subject.email.should == 'test@test.com'
-        subject.password.should == 'example'
+        subject.access_id.should == 'test'
+        subject.access_key.should == 'example'
       end
     end
   end
@@ -34,11 +34,11 @@ describe Sumo::Client do
     let(:response) { double(:response) }
     let(:creds) {
       {
-        'email' => 'creds@email.com',
-        'password' => 'test'
+        'access_id' => 'creds',
+        'access_key' => 'test'
       }
     }
-    let(:encoded) { Base64.encode64('creds@email.com:test').strip }
+    let(:encoded) { Base64.encode64('creds:test').strip }
     subject { Sumo::Client.new(creds) }
     before { subject.stub(:connection).and_return(connection) }
 

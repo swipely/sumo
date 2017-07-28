@@ -26,8 +26,8 @@ describe Sumo::Config, :current do
     context 'when #load_creds! does not raise an error' do
       let(:creds) {
         {
-          :email => 'test@example.com',
-          :password => 'canthackthis'
+          :access_id => 'test',
+          :access_key => 'canthackthis'
         }
       }
       before { subject.stub(:load_creds!).and_return(creds) }
@@ -76,8 +76,8 @@ describe Sumo::Config, :current do
         context 'when the specified key can be found' do
           let(:expected) {
             {
-              'email' => 'test@example.com',
-              'password' => 'trustno1'
+              'access_id' => 'test',
+              'access_key' => 'trustno1'
             }
           }
           before { ENV['SUMO_CREDENTIAL'] = 'engineering' }
@@ -86,6 +86,19 @@ describe Sumo::Config, :current do
           it 'returns those credentials' do
             expect(subject.load_creds!).to eq(expected)
           end
+        end
+      end
+
+      context 'when the file contains deprecated keys' do
+        let(:test_config_file) {
+          File.join(
+            File.dirname(__FILE__), '..', '..', 'fixtures', 'deprecated-creds'
+          )
+        }
+
+        it 'raises an error' do
+          expect { subject.load_creds! }
+            .to raise_error(Sumo::Error::EmailPasswordDeprecated)
         end
       end
     end
